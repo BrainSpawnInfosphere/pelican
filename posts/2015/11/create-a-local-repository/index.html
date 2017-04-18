@@ -1,0 +1,252 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create a Local Repository | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Create a debian package and setup a repository"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/11/create-a-local-repository">Create a Local Repository</a></h2>
+<h5><i class="icon-feather"></i> Sat 28 November 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p><em>Why would you want to do this?</em> Because the packages on Raspbian are grossly
+outdated in most cases. This allows me to compile current versions of software
+and easily install/uninstall them without cluttering up my OS.</p>
+<p>Let's use node.js as an example. <strong>Note</strong> I used multiple windows in this, one
+to create the package/install node and another to run the server and debug.</p>
+<div class="section" id="get-software">
+<h2>Get Software</h2>
+<p>If you don't have it already get:</p>
+<pre class="literal-block">
+apt-get install build-essential
+</pre>
+<p>Then grab node.js from the website (current version is 4.4.7):</p>
+<pre class="literal-block">
+wget https://nodejs.org/dist/v4.4.7/node-v4.4.7-linux-armv6l.tar.xz
+tar -xvf node-v4.4.7-linux-armv6l.tar.xz
+cd node-v4.4.7-linux-armv6l
+</pre>
+</div>
+<div class="section" id="create-debian-package">
+<h2>Create Debian Package</h2>
+<p>The basic layout of a debian package is:</p>
+<pre class="literal-block">
+package/
+  -- usr/loca/*  (bin, lib, include, etc)
+  -- DEBIAN/
+      -- changelog
+      -- copyright
+      -- compat
+      -- control
+      -- install
+</pre>
+<p>The copyright should look like:</p>
+<pre class="literal-block">
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: package
+Upstream-Contact: Name, &lt;email&#64;address&gt;
+
+Files: *
+Copyright: 2011, Name, &lt;email&#64;address&gt;
+License: (GPL-2+ | LGPL-2 | GPL-3 | whatever)
+Full text of licence.
+.
+Unless there is a it can be found in /usr/share/common-licenses
+</pre>
+<p>However, since this is for my own consumption, you don't need all of this to get it to work.</p>
+<p>Now inside the <tt class="docutils literal"><span class="pre">node-v4.4.7-linux-armv6l</span></tt> directory do:</p>
+<pre class="literal-block">
+mkdir DEBIAN
+mkdir usr
+mkdir usr/local
+
+cp bin usr/local
+cp lib usr/local
+cp include usr/local
+cp share usr/local
+</pre>
+<p>Setup a control file for the package with <tt class="docutils literal">pico DEBIAN/control</tt>:</p>
+<pre class="literal-block">
+Package: nodejs
+Version: 4.4.7
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Installed-Size: 1024
+Maintainer: me
+Description: kevin - installs node.js
+</pre>
+<p>Now go up one directory:</p>
+<pre class="literal-block">
+cd ..
+dpkg-deb --build node-v4.4.7-linux-armv6l
+mv node.deb node-4.4.7_arm6l.deb
+</pre>
+<p>Now, if you chose an architecture other than <tt class="docutils literal">arm6l</tt> like <tt class="docutils literal">arm7l</tt> then name the package that.</p>
+</div>
+<div class="section" id="test">
+<h2>Test</h2>
+<p>Make sure it works:</p>
+<pre class="literal-block">
+dpkg -i node-4.4.7_arm6l.deb
+node --version
+npm --version
+</pre>
+</div>
+<div class="section" id="create-local-repository">
+<h2>Create Local Repository</h2>
+<p>Get the node static webserver using <tt class="docutils literal">npm</tt>:</p>
+<pre class="literal-block">
+npm install -g http-server
+</pre>
+<p>Create the repository:</p>
+<pre class="literal-block">
+cd /some/where/you/want
+mkdir www
+cd www
+mkdir debian
+cp /path/to/node-4.4.7_arm6l.deb www/debian
+</pre>
+<p>While still in the <tt class="docutils literal">www</tt> directory:</p>
+<pre class="literal-block">
+dpkg-scanpackages debian /dev/null | gzip -9c &gt; debian/Packages.gz
+</pre>
+<div class="section" id="start-node">
+<h3>Start Node</h3>
+<p>Now move out of <tt class="docutils literal">www</tt>:</p>
+<pre class="literal-block">
+cd ..
+http-server ./www
+</pre>
+<p>When node runs, it will print out what the server address and port is, you will need this in the next step. Your repo
+should have the following packages and repository info:</p>
+<pre class="literal-block">
+www/
+  -- debian/
+      -- node-4.4.7_armv6l.deb
+      -- Packages.gz
+</pre>
+<p>Now obviously, as you add more packages, there will be more here.</p>
+</div>
+<div class="section" id="update-apt-source">
+<h3>Update apt/source</h3>
+<p>Tell your system where it is:</p>
+<pre class="literal-block">
+sudo echo &quot;deb http://bender.local:8081 debian/&quot; &gt;&gt; /etc/apt/sources.list
+sudo update
+</pre>
+<p>Now a lot of stuff will spin by from node or from the update, but it should all be fine. We built a simple repository, not
+a complex with for different languages/etc. Now double check you can see it:</p>
+<pre class="literal-block">
+apt-cache showpkg nodejs
+Package: nodejs
+Versions:
+4.4.7 (/var/lib/apt/lists/bender.local:8081_debian_Packages) (/var/lib/dpkg/status)
+Description Language:
+                 File: /var/lib/apt/lists/bender.local:8081_debian_Packages
+                  MD5: 27f92553e61d941b7c6e5440bc637089
+
+0.10.29~dfsg-2 (/var/lib/apt/lists/mirrordirector.raspbian.org_raspbian_dists_jessie_main_binary-armhf_Packages)
+Description Language:
+                 File: /var/lib/apt/lists/mirrordirector.raspbian.org_raspbian_dists_jessie_main_binary-armhf_Packages
+                  MD5: e507fb472d7cdaceffc5b285a62d5c1b
+
+
+Reverse Depends:
+  nodered,nodejs 0.10
+  twitter-recess,nodejs
+  ruby-passenger,nodejs
+  ruby-execjs,nodejs
+  ...
+</pre>
+</div>
+</div>
+<div class="section" id="service">
+<h2>Service</h2>
+<p><tt class="docutils literal">sudo pico /etc/systemd/system/repo.service</tt>:</p>
+<pre class="literal-block">
+[Service]
+ExecStart=/usr/local/bin/http-server /home/pi/www
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=repository
+User=pi
+Group=pi
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+</pre>
+<p>Then do:</p>
+<pre class="literal-block">
+sudo systemctl enable repo.service
+sudo systemctl start repo.service
+</pre>
+<p>or perhaps easier to remember:</p>
+<pre class="literal-block">
+sudo service repo start
+service repo status
+</pre>
+<p>Now you can use <tt class="docutils literal">sudo systemctl start|stop|status repo.service</tt> to start,
+stop, or find the current status of the server.</p>
+<p>You can change the port, by: <tt class="docutils literal"><span class="pre">ExecStart=/usr/local/bin/http-server</span> /home/pi/www <span class="pre">-p</span> 9000</tt></p>
+<p>Double check things are working by launching a web browser and pointing it to: <a class="reference external" href="http://host:8081">http://host:8081</a></p>
+</div>
+<div class="section" id="references">
+<h2>References</h2>
+<ul class="simple">
+<li><a class="reference external" href="http://linuxconfig.org/easy-way-to-create-a-debian-package-and-local-package-repository">http://linuxconfig.org/easy-way-to-create-a-debian-package-and-local-package-repository</a></li>
+<li><a class="reference external" href="http://askubuntu.com/questions/90764/how-do-i-create-a-deb-package-for-a-single-python-script">http://askubuntu.com/questions/90764/how-do-i-create-a-deb-package-for-a-single-python-script</a></li>
+</ul>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

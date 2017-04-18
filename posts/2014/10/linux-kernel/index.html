@@ -1,0 +1,89 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Linux Kernel | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Configuring and updating the linux kernal for the RPi"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2014/10/linux-kernel">Linux Kernel</a></h2>
+<h5><i class="icon-feather"></i> Sun 26 October 2014
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="figure align-center">
+<img alt="" src="../../../../blog/raspbian/pics/linux.jpg" style="width: 200px;" />
+</div>
+<div class="section" id="determine-kernel-version-and-upgrade">
+<h2>Determine Kernel version and upgrade</h2>
+<p>You can determine the current linux kernel version by:</p>
+<pre class="literal-block">
+[kevin&#64;raspberrypi tmp]$ more /proc/version
+Linux version 3.2.27+ (dc4&#64;dc4-arm-01) (gcc version 4.7.2 20120731 (prerelease)
+(crosstool-NG linaro-1.13.1+bzr2458 - Linaro GCC 2012.08) ) #250 PREEMPT Thu Oct
+ 18 19:03:02 BST 2012
+</pre>
+<p>or</p>
+<pre class="literal-block">
+[kevin&#64;raspberrypi tmp]$ uname -a
+Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux
+</pre>
+<p>In both cases, this is kernel version 3.2.27. Note that the <em>l</em> in
+<tt class="docutils literal">armv6l</tt> refers to little endian.</p>
+<p>Get and install <a class="reference external" href="http://github.com/Hexxeh/rpi-update">rpi-update</a>:</p>
+<pre class="literal-block">
+sudo apt-get install rpi-update
+</pre>
+<p>Now you can use rpi-update to get the current kernel:</p>
+<pre class="literal-block">
+sudo apt-get upgrade rpi-update
+sudo rpi-update
+</pre>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

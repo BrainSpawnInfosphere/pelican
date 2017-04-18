@@ -1,0 +1,144 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Beacons | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Bluetooth beacons"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/11/beacons">Beacons</a></h2>
+<h5><i class="icon-feather"></i> Fri 13 November 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>Bluetooth low energy (Bluetooth LE, BLE, marketed as Bluetooth Smart) is a
+wireless personal area network technology designed and marketed by the
+Bluetooth Special Interest Group aimed at novel applications in the healthcare,
+fitness, beacons, security, and home entertainment industries. Compared
+to Classic Bluetooth, Bluetooth Smart is intended to provide considerably
+reduced power consumption and cost while maintaining a similar communication
+range.</p>
+<div class="section" id="ibeacon">
+<h2>iBeacon</h2>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/raspbian/pics/ibeacon.png" style="width: 200px;" />
+</div>
+<div class="section" id="i2c">
+<h3>I2C</h3>
+<p>Get software:</p>
+<pre class="literal-block">
+sudo apt-get install libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
+</pre>
+<p>Additionally, get:</p>
+<pre class="literal-block">
+sudo apt-get install bluez bluez-tools python-bluez
+</pre>
+<p>Check status of bluetooth</p>
+<pre class="literal-block">
+$ hciconfig
+hci0:   Type: BR/EDR  Bus: USB
+BD Address: 00:1A:7D:DA:71:13  ACL MTU: 310:10  SCO MTU: 64:8
+UP RUNNING
+RX bytes:2401 acl:0 sco:0 events:119 errors:0
+TX bytes:2155 acl:0 sco:0 commands:119 errors:0
+</pre>
+<p>If it is already up and running, you can shut it down with:</p>
+<pre class="literal-block">
+sudo tools/hciconfig hci0 down
+</pre>
+<p>Now turn it on:</p>
+<pre class="literal-block">
+sudo tools/hciconfig hci0 up
+sudo tools/hciconfig hci0 leadv
+sudo tools/hciconfig hci0 noscan
+</pre>
+<p>Then send one of these commands:</p>
+<pre class="literal-block">
+sudo hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 E2 0A 39 F4 73 F5 4B C4 A1 2F 17 D1 AD 07 A9 61 00 00 00 00 C8 00
+sudo hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 E2 C5 6D B5 DF FB 48 D2 B0 60 D0 F5 A7 10 96 E0 00 00 00 00 C8 00
+</pre>
+<p>Format</p>
+<pre class="literal-block">
+hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 [UUID] [Major] [Minor] [Power]
+</pre>
+<p>where, Manufacturers Specific Data starts with FF and 4C 00 is for
+Apple. The other stuff is:</p>
+<pre class="literal-block">
+UUID: E2C56DB5-DFFB-48D2-B060-D0F5A71096E0
+Major: 00 00
+Minor: 00 00
+Power: C8
+</pre>
+<p>You should see it appear on a bluetooth finder <a class="reference external" href="https://itunes.apple.com/us/app/ibeacon-locate/id738709014">Locate
+Beacon</a>
+by Radius Networks.</p>
+<p>To stop transmission:</p>
+<pre class="literal-block">
+sudo hciconfig hci0 noleadv
+</pre>
+</div>
+<div class="section" id="ibeacon-software">
+<h3>iBeacon Software</h3>
+<p><tt class="docutils literal">git clone <span class="pre">https://github.com/carsonmcdonald/bluez-ibeacon.git</span></tt></p>
+<p>iBeacon-Scanner: <tt class="docutils literal">git clone <span class="pre">https://github.com/switchdoclabs/iBeacon-Scanner-.git</span></tt></p>
+<p>BeaconAirPython: <tt class="docutils literal">git clone <span class="pre">https://github.com/switchdoclabs/BeaconAirPython.git</span></tt></p>
+</div>
+</div>
+<div class="section" id="eddystone">
+<h2>Eddystone</h2>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/raspbian/pics/eddystone.png" style="width: 200px;" />
+</div>
+<p><a class="reference external" href="https://developers.google.com/beacons/">https://developers.google.com/beacons/</a></p>
+<p>Eddystone is a protocol specification that defines a Bluetooth low energy (BLE)
+message format for proximity beacon messages. It describes several different
+frame types that may be used individually or in combinations to create beacons
+that can be used for a variety of applications.</p>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

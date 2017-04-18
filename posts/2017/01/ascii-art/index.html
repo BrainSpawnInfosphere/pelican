@@ -1,0 +1,180 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Ascii Art | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Creating ascii art"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2017/01/ascii-art">Ascii Art</a></h2>
+<h5><i class="icon-feather"></i> Sat 07 January 2017
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="figure align-center">
+<img alt="" src="https://cdn-learn.adafruit.com/assets/assets/000/032/618/medium800/adafruit_products_3006_kit_ORIG.jpg?1464029419" />
+</div>
+<p>You can create ascii art from jpegs or text with the programs. The can be useful
+if you want some ascii art on your login prompt or whatever.:</p>
+<pre class="literal-block">
+jp2a --background=light -i --output='art.txt' &lt;some_file.jpg&gt;
+figlet 'hello world'
+</pre>
+<p>Use <tt class="docutils literal">brew</tt> to install:</p>
+<pre class="literal-block">
+brew install jp2a
+</pre>
+<p>Using:</p>
+<pre class="literal-block">
+kevin&#64;Logan github $ jp2a --help
+jp2a 1.0.6
+Copyright (C) 2006 Christian Stigen Larsen
+Distributed under the GNU General Public License (GPL) v2.
+
+Usage: jp2a [ options ] [ file(s) | URL(s) ]
+
+Convert files or URLs from JPEG format to ASCII.
+
+OPTIONS
+  -                 Read images from standard input.
+      --blue=N.N    Set RGB to grayscale conversion weight, default is 0.1145
+  -b, --border      Print a border around the output image.
+      --chars=...   Select character palette used to paint the image.
+                    Leftmost character corresponds to black pixel, right-
+                    most to white.  Minimum two characters must be specified.
+      --clear       Clears screen before drawing each output image.
+      --colors      Use ANSI colors in output.
+  -d, --debug       Print additional debug information.
+      --fill        When used with --color and/or --html, color each character's
+                    background color.
+  -x, --flipx       Flip image in X direction.
+  -y, --flipy       Flip image in Y direction.
+  -f, --term-fit    Use the largest image dimension that fits in your terminal
+                    display with correct aspect ratio.
+      --term-height Use terminal display height.
+      --term-width  Use terminal display width.
+  -z, --term-zoom   Use terminal display dimension for output.
+      --grayscale   Convert image to grayscale when using --html or --colors
+      --green=N.N   Set RGB to grayscale conversion weight, default is 0.5866
+      --height=N    Set output height, calculate width from aspect ratio.
+  -h, --help        Print program help.
+      --html        Produce strict XHTML 1.0 output.
+      --html-fill   Same as --fill (will be phased out)
+      --html-fontsize=N   Set fontsize to N pt, default is 4.
+      --html-no-bold      Do not use bold characters with HTML output
+      --html-raw    Output raw HTML codes, i.e. without the &lt;head&gt; section etc.
+      --html-title=...  Set HTML output title
+  -i, --invert      Invert output image.  Use if your display has a dark
+                    background.
+      --background=dark   These are just mnemonics whether to use --invert
+      --background=light  or not.  If your console has light characters on
+                    a dark background, use --background=dark.
+      --output=...  Write output to file.
+      --red=N.N     Set RGB to grayscale conversion weight, default 0.2989f.
+      --size=WxH    Set output width and height.
+  -v, --verbose     Verbose output.
+  -V, --version     Print program version.
+      --width=N     Set output width, calculate height from ratio.
+
+  The default mode is `jp2a --term-fit --background=dark'.
+  See the man-page for jp2a for more detailed help text.
+
+Project homepage on http://jp2a.sf.net
+Report bugs to &lt;csl&#64;sublevel3.org&gt;
+</pre>
+<p>There is a lot you can do with it. Example printed to terminal:</p>
+<pre class="literal-block">
+kevin&#64;Logan pics $ jp2a --background=light  linux.jpg
+                                    .cx0XWMNX0d;
+                                 'o0WMMMMMMMMMWWXx:.
+                               .kWMMMMMMMMMMMMXxOXWNx'
+                              'NMMMMMMMMMMMMMMXKXNWMMW;
+                              kMMMMMMMMMMMMMMMMMMMMMMMN,
+                             .XMMMMWWMMMMMMMMMWNNWMMMMMN.
+                             ,MMW0OOKXMMMMNOdloxOKWMMMMMo
+                             ,MWc.. 'OMMMX,  .. .kWMMMMMO
+                             ,M0'Kkl ,MNNc .0Wk; .XMMMMMO
+                             .NX:NNK;,Okkc cMMW0  0MMMMMk
+                             .KMo;Ol;,..',',lxx, lMMMMMM0
+                              0WO:'.............'dWMMMMMW:
+                              kK:............',,'cWMMWWMMK.
+                              oWx:,'....'',,,'',;dWMMKkOXMd
+                              dMd:lc;,'','',;,....xWMWKkOWW:
+                             ,NMl.':lcc:::;'.      dMMMMMMMNc
+                            oWWk.  .';;,..          lWMMMMMMWx.
+                          ;XMN:       .              oMMMMMMMMN:
+                         oWMN;                       .XMMMMMMMMWx.
+                       ,KMMWd.                   .... ;WMMMMMMMMMX,
+                      lWMMMOc,.                ..',;;;.;NMWNWMMMMMWo
+                     lMWWM0'                        ..,'cWMWNNWMMMMMx
+                    ;NWNMX.                            ..:NMWNWWMMMMMO.
+                   ,NNNW0.                                lWNNWNXMMMMMk
+                   0WNM0.                                 .NMMMMKNMMMMMx
+                  oMWWM:                                   kMMMMNNMMMMMM:
+                 dWNNM0            .                       oMMMMWWMMMMMMO
+               .kMMXXMc            .                       lMMMMXWMMMMMMW.
+               dMMMNKN,            .                       lMMMNXMMMMMMMM'
+               cN0OKXX;           ..                       lWNNXWWNNNWMMK
+               .'...:xO:.          .                     ..dNWMMMMMMX0NX;
+             .........;0Nd.                            ....cWMMMMMMMMK;..
+           .',.........'dNNk,                         .;..'l0WMMMMWXx,...
+     ....',,'............cNMMKl.                     .;c'.';cokOOko:'....
+     '....................:KMMMWk.                   .;l,...',,;,,'........
+     ''....................'kWMMM:                   .lo:'...................
+     .'.....................'o0dl.                  .xKo:'......................
+     .'.......................,,.                .:kNM0l;.......................
+     ..........................'l;.        ..,cxKWMMMWxc,.....................
+     ..........................':OWX0OOO0KXWMMMMMMMMMNo:,...............'...
+     .';;;,,,,'''.............',:xWMMMMMMMMMMMMMMMMMMXo:,'.........',;,'..
+      ..',,;::cccc:;,,''''''';:clkKOxxxddddoooooddxkOOol:;,,,,,,;:c:;'.....
+       .......'',,;:cccccccccloc;'..............''',,,coollccclll:'.......
+         ..........'''',;::::;'........   ...........'',;:::::;,........
+              ...................               ...................
+</pre>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

@@ -1,0 +1,127 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Computer Monitoring | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Tools to monitor your network"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/07/computer-monitoring">Computer Monitoring</a></h2>
+<h5><i class="icon-feather"></i> Fri 17 July 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="8%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Program</th>
+<th class="head">Usefulness</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>iftop</td>
+<td>great</td>
+<td>Monitor inbound and outbound IP traffic of the host computer</td>
+</tr>
+<tr><td>netstat</td>
+<td>good</td>
+<td>Monitor incoming/outgoing network packets, <tt class="docutils literal">netstat <span class="pre">-a</span></tt></td>
+</tr>
+<tr><td>lsof</td>
+<td>low</td>
+<td>List of open files (e.g., disk files, network sockets, pipes, devices, and processes) and processes</td>
+</tr>
+<tr><td>htop</td>
+<td>great</td>
+<td>Like <tt class="docutils literal">top</tt> but much more user friendly</td>
+</tr>
+<tr><td>iptraf</td>
+<td>good</td>
+<td>Network monitoring</td>
+</tr>
+<tr><td>btscanner</td>
+<td>low</td>
+<td>Bluetooth scanner</td>
+</tr>
+<tr><td>darkstat</td>
+<td>great</td>
+<td>Network traffic analyzer with web interface, <tt class="docutils literal">darkstat <span class="pre">-i</span> en0 <span class="pre">-p</span> 8080</tt>, point browser to <a class="reference external" href="http://localhost:8080">localhost:8080</a> to see results</td>
+</tr>
+<tr><td>nmap</td>
+<td>good</td>
+<td>Network mapper</td>
+</tr>
+<tr><td>p0f</td>
+<td>low</td>
+<td>Passive OS finger printing tool</td>
+</tr>
+<tr><td>wireshark</td>
+<td>great</td>
+<td>Network traffic analyzer</td>
+</tr>
+</tbody>
+</table>
+<p>Other useful
+<a class="reference external" href="http://hack-tools.blackploit.com/2014/07/pwnpi-pen-test-drop-box-distro-for.html">tools</a>
+for your network.</p>
+<div class="section" id="tools">
+<h2>Tools</h2>
+<p>Install:</p>
+<pre class="literal-block">
+    sudo apt-get nmap
+sudo apt-get install tshark libcap-dev snmp-mibs-downloader
+pip install scapy pcapy
+</pre>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

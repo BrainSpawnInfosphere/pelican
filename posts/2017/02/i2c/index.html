@@ -1,0 +1,118 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>i2c | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="i2c on linux"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2017/02/i2c">i2c</a></h2>
+<h5><i class="icon-feather"></i> Sun 05 February 2017
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>First we need to load the drivers</p>
+<pre class="literal-block">
+sudo modprobe i2c-dev
+sudo modprobe i2c-bcm2708
+</pre>
+<p>Now <tt class="docutils literal"><span class="pre">/dev/i2c-0</span></tt> and <tt class="docutils literal"><span class="pre">/dev/i2c-1</span></tt> should exist. Also, so see what is
+on the i2c bus, install the <tt class="docutils literal"><span class="pre">i2c-tools</span></tt> using:</p>
+<pre class="literal-block">
+sudo apt-get install i2c-tools
+</pre>
+<p>Now to explore the i2c bus try:</p>
+<pre class="literal-block">
+[kevin&#64;raspberrypi ~]$ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+</pre>
+<p>To have these load at boot, add them to <tt class="docutils literal">/etc/modules</tt>:</p>
+<pre class="literal-block">
+pi&#64;bender ~/github/soccer2 $ sudo more /etc/modules
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with &quot;#&quot; are ignored.
+# Parameters can be specified after the module name.
+
+snd-bcm2835
+i2c-dev
+i2c-bcm2708
+</pre>
+<pre class="literal-block">
+sudo apt-get install python-smbus
+sudo apt-get install i2c-tools
+</pre>
+<pre class="literal-block">
+pi&#64;bender ~/github/soccer2 $ sudo i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- 18 -- -- -- -- -- 1e --
+20: 20 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- 69 -- -- -- -- -- --
+70: 70 -- -- -- -- -- -- --
+</pre>
+<p>This shows what things are on the I2C bus: 0x18 (accelerometers), 0x1e
+(forget?), and 0x69 (gyros).</p>
+<p>Next, get Adafruit's python code which has I2C code for a variety of things:</p>
+<pre class="literal-block">
+git clone https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code.git
+</pre>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

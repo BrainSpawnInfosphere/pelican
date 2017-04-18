@@ -1,0 +1,149 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Python Setup | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Python setup"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2012/12/python-setup">Python Setup</a></h2>
+<h5><i class="icon-feather"></i> Sat 22 December 2012
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="figure align-center">
+<img alt="" src="../../../../blog/computers/pics/python.png" style="width: 200px;" />
+</div>
+<div class="section" id="install-on-rpi">
+<h2>Install on RPI</h2>
+<div class="section" id="out-with-the-old">
+<h3>Out with the Old</h3>
+<p>First uninstall all the installed python <tt class="docutils literal"><span class="pre">apt-get</span></tt> crap, otherwise you get warnings and
+files left behind when you use <tt class="docutils literal">pip</tt>:</p>
+<pre class="literal-block">
+sudo apt-get remove python-pip python3-pip
+sudo apt-get autoremove
+sudo apt-get install python-dev
+</pre>
+<p>Fix permissions so we don't need <tt class="docutils literal">sudo</tt> which is a security issue:</p>
+<pre class="literal-block">
+$ sudo chown -R pi:pi /usr/local
+</pre>
+<p>Now all of the python modules using <tt class="docutils literal">pip</tt> don't need <tt class="docutils literal">sudo</tt> to get installed.</p>
+</div>
+<div class="section" id="get-current-python">
+<h3>Get Current Python</h3>
+<p><a class="reference external" href="http://sowingseasons.com/blog/building-python-2-7-10-on-raspberry-pi-2.html">Raspbian</a>
+is currently lazy on upgrading python to a current version.</p>
+<p>Grab Pre-requisites:</p>
+<div class="highlight"><pre><span></span>sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install build-essential libncursesw5-dev libgdbm-dev libc6-dev
+sudo apt-get install zlib1g-dev libsqlite3-dev tk-dev
+sudo apt-get install libssl-dev openssl
+</pre></div>
+<p>Download and Make:</p>
+<div class="highlight"><pre><span></span>$ mkdir tmp
+$ cd tmp
+$ wget https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz
+$ tar -zxvf Python-2.7.10.tgz
+$ cd Python-2.7.10
+$ ./configure
+$ make -j 4
+$ sudo make install
+</pre></div>
+</div>
+<div class="section" id="setup-pip">
+<h3>Setup Pip</h3>
+<p>Get <tt class="docutils literal">pip</tt>:</p>
+<pre class="literal-block">
+$ cd ..
+$ wget https://bootstrap.pypa.io/get-pip.py
+$ python get-pip.py
+</pre>
+</div>
+</div>
+<div class="section" id="python-packages">
+<h2>Python Packages</h2>
+<p>Alot of very useful packages are available from <a class="reference external" href="https://pypi.python.org/pypi">PyPI</a>
+and can be installed using <tt class="docutils literal">pip</tt>.</p>
+<p>You can use <tt class="docutils literal">pip</tt> to install and keep python libraries up to date.
+Unfortunately <tt class="docutils literal">pip</tt> isn't the best package manager, but it could be
+worse ... <tt class="docutils literal"><span class="pre">apt-get</span></tt> anyone? Some useful, undocumented commands:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pip flag</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>list</td>
+<td>list installed packages</td>
+</tr>
+<tr><td>list --outdated</td>
+<td>list packages that can be upgraded</td>
+</tr>
+<tr><td>install <em>pkg</em></td>
+<td>install a new package</td>
+</tr>
+<tr><td>install -U <em>pkg</em></td>
+<td>upgrade an exisiting package</td>
+</tr>
+</tbody>
+</table>
+<p>Why the people who run <tt class="docutils literal">pip</tt> don't make useful commands like
+<tt class="docutils literal">pip upgrade</tt> or <tt class="docutils literal">pip outdated</tt> I don't know. Instead there are
+duplicate commands like <tt class="docutils literal">pip freeze</tt> which is the same as
+<tt class="docutils literal">pip list</tt> and adds no real value.</p>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

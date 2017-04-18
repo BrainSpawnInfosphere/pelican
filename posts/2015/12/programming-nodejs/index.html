@@ -1,0 +1,324 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Programming Node.js | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Nodejs into to programming"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/12/programming-nodejs">Programming Node.js</a></h2>
+<h5><i class="icon-feather"></i> Sun 13 December 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>HTTP is one of the pillars behind the world wide web. HTTP describes the
+transfer of state between client an server. With HTTP, an embedded device can a
+nswer requests from other places in a network, or it can itself send updates or
+fetch instructions from a server.</p>
+<div class="section" id="using-the-http-module">
+<h2>Using the http module</h2>
+<p>In Node.js, the simplest way to turn a device into a network application is
+with http. This module is part of the Node.js core library, and you find a nice
+overview here .</p>
+<p>Let’s start by creating a web server locally on your laptop. We then transfer
+the project later to an embedded device. We must first install the http module:</p>
+<pre class="literal-block">
+$ npm install --save http
+</pre>
+<p>Then, we setup a file server.js:</p>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;hello\n&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="c1">// start server at a port</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Starting server at port: &#39;</span> <span class="o">+</span> <span class="nx">port</span><span class="p">);</span>
+</pre></div>
+<p>The first thing we do is creating a command createServer. Often it is a good
+idea to add some HTTP headers to inform the client about the type of payload.
+When the server receives an HTTP request, it says “hello” in the response The
+response object res is a data stream which we need to close with res.end() to
+transport a response.</p>
+<p>To see this in action, you can navigate your browser to localhost:3000, or
+send a request with curl:</p>
+<pre class="literal-block">
+$ curl localhost:3000
+hello
+</pre>
+</div>
+<div class="section" id="live-reloading">
+<h2>Live Reloading</h2>
+<p>When developing a server, it can be nice to automatically reload the server
+process, when the file server.js has changed.</p>
+<p>A good tool to achieve this goal is with nodemon.</p>
+<p>Let’s install this next:</p>
+<pre class="literal-block">
+$ npm install nodemon
+</pre>
+<p>When you now run the server with:</p>
+<pre class="literal-block">
+$ nodemon server.js
+</pre>
+<p>You should see updates whenever you change the file server.js with an editor:</p>
+<pre class="literal-block">
+18 Aug 20:04:59 - [nodemon] v1.4.1
+18 Aug 20:04:59 - [nodemon] to restart at any time, enter `rs`
+18 Aug 20:04:59 - [nodemon] watching: *.*
+18 Aug 20:04:59 - [nodemon] starting `node server.js`
+18 Aug 20:07:17 - [nodemon] restarting due to changes...
+18 Aug 20:07:17 - [nodemon] starting `node server.js`
+</pre>
+<p>Once we have a basic server, that we can try on an embedded device, we have to copy the project to the device.
+Automatic Deployment</p>
+<p>Now that this works, let’s deploy this server to an embedded device such as an Edison or Raspberry Pi. The simplest way to copy an app to server is through scp, a remote copy based on ssh.
+Assuming a setup on a machine eddie, you can do this basically with:</p>
+<pre class="literal-block">
+$ scp * root&#64;eddie:~
+root&#64;eddie's password:
+server.js                            100%    0     0.0KB/s   00:00
+</pre>
+<p>Instead of scp, it is often nice to setup app deployment based on git. With
+git, you get version control out of the box. And git automatically compresses
+files for faster file transfer.</p>
+<p>First, let’s initialize git in our project with:</p>
+<pre class="literal-block">
+$ git init
+$ cat &gt; .gitignore
+node_modules/**/*
+$ git add .
+$ git commit -m &quot;init&quot;
+</pre>
+<p>The first lines make a local git repository. For Node.js projects, it is often
+good to skip the local packages in node_modules. This is why we create a .
+gitignore file. Last, we commit the everything into the project.</p>
+<p>To deploy via git, you first have to setup a so-called “bare” repository on
+the device. This bare repository can then be cloned and act as proxy for the
+active server.</p>
+<p>To do this, you login with:</p>
+<pre class="literal-block">
+$ ssh root&#64;eddie
+$ mkdir -p git/http_server.git
+$ cd git/http_server.git
+$ git init --bare
+</pre>
+<p>With the first commands you create empty directories, the second command asks
+git to provide an empty shell for a repository. Next, let’s push your server
+from previously to this directory.</p>
+<p>For this, you do on your local machine:</p>
+<pre class="literal-block">
+$ git remote add eddie ssh://root&#64;eddie:/home/root/git/http_server.git
+$ git push eddie master
+</pre>
+<p>Now, the repo on the device is ready to use.
+Let’s go to the remote device with:</p>
+<pre class="literal-block">
+$ ssh root&#64;eddie
+</pre>
+<p>Now, we first clone the repo with:</p>
+<pre class="literal-block">
+$  git clone git/http_server.git
+</pre>
+<p>This new repo tracks the main branch. To see it in action, you can do:</p>
+<pre class="literal-block">
+$ node server.js
+</pre>
+<p>And request the URL from the server:</p>
+<pre class="literal-block">
+$ curl eddie:3000
+hello
+</pre>
+<p>The last step is to connect a “post-receive” hook to the repo. With this, you
+can trigger some script on the device, as soon as there are updates received.
+In a file git/http_server.git/hooks/post-receive you insert:</p>
+<pre class="literal-block">
+#!/bin/sh
+git --work-tree=/home/root/projects/simple_http \
+  --git-dir=/home/root/projects/git/simple_http.git checkout -f
+</pre>
+<p>Then, you make the script executable:</p>
+<pre class="literal-block">
+$ chmod u+x git/http_server.git/hooks/post-receive
+</pre>
+<p>If you now push to the repo on the Edison, you’ll automatically get an update
+in second directory, where you can run your server process.</p>
+</div>
+<div class="section" id="handling-routes">
+<h2>Handling Routes</h2>
+<p>A request to a web server can take different paths, or routes. Commonly, we
+have many states that we want to offer, or to read back. We can implement
+routes with a simple if-then tree that parses the incoming request. Since this
+quickly gets more difficult, we can also use a module router from npm.</p>
+</div>
+<div class="section" id="adding-a-router">
+<h2>Adding a router</h2>
+<p>Every http request is checked for tis path. This makes it necessary to define
+“routes” for HTTP requests.</p>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;switch state\n&#39;</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span> <span class="o">==</span> <span class="s1">&#39;/ON&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span> <span class="o">==</span> <span class="s1">&#39;/OFF&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Starting server at port: &#39;</span> <span class="o">+</span> <span class="nx">port</span><span class="p">);</span>
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span>
+</pre></div>
+<p>If the data path is the default route, an index HTML is served. If the path
+contains ON, we could switch a device ON. Otherwise, the server could switch a
+device off.</p>
+</div>
+<div class="section" id="the-router-module">
+<h2>The router module</h2>
+<p>To manage routes on a server, it is easier to pull in a router module into your project.
+A simple approach is the following. We can include a router module with:</p>
+<pre class="literal-block">
+$ npm install --save router
+</pre>
+<p>This router handles incoming requests and a finalhandler module delivers a
+default response. We need to install a module for this too:</p>
+<pre class="literal-block">
+$ npm install --save finalhandler
+</pre>
+<p>Also, a logger can be helpful:</p>
+<pre class="literal-block">
+$ npm install --save morgan
+</pre>
+<p>Now, we can rewrite the simple web server from above as follows.
+First, we require the new modules and integrate the router:</p>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">finalhandler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;finalhandler&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Router</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;router&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">Router</span><span class="p">();</span>
+<span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Turn a device ON or OFF&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/state&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">state</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="c1">// add API</span>
+<span class="kd">var</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">Router</span><span class="p">();</span>
+<span class="nx">api</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/toggle/:state&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Set embedded state: &#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">state</span><span class="p">);</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">});</span>
+  <span class="c1">// --&gt; integrate hardware connection to come</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">router</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/api&#39;</span><span class="p">,</span> <span class="nx">api</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">router</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">finalhandler</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">));</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span>
+</pre></div>
+<p>As you can see, there is an additional route for API requests. We are going to
+examine how to set and change the hardware with an API in the next chapter.</p>
+</div>
+<div class="section" id="driving-state-with-http">
+<h2>Driving state with HTTP</h2>
+<p>With curl, it is easily possible to drive state on the server from the command
+line. For example, to toggle the state of a LED with curl:</p>
+<pre class="literal-block">
+$ curl -X POST localhost:3474/api/toggle/ON
+</pre>
+<p>The same request can be done from the browser application. To call the API from
+a browser, if you go to the eddie:3000/state in your browser, you can see that
+the path has changed.</p>
+<p>This is a good preparation for building the user interface in the next chapter.
+Before doing that, let’s first explore an alternative to transfer of state
+with HTTP.</p>
+</div>
+<div class="section" id="the-websocket-module">
+<h2>The Websocket module</h2>
+<p>Websockets are intensively used for building realtime web applications. They
+have two advantages over using HTTP:</p>
+<p>1. Websockets add less communication overhead to a network since it does not
+use headers for every communication request
+2. With Websockets, you can listen for certain messages and push state directly
+to a client</p>
+<p>The examples with HTTP did not “automatically” update the state of an
+device. So, a user must fetch state “manually”. For many situations, we want to
+broadcast data from an embedded device. This is when pushing state with
+websockets becomes interesting.</p>
+<p>NOTE</p>
+<p>A number of Node modules for websockets exists. socket.io is popular too and
+offers a number of fallbacks when websockets are not available. Websockets is
+one possible transport for socket.io (others are flashsocket, htmlfile,
+xhr-polling and jsonp-polling)</p>
+<p>For now, we are going to use the ws module. Install the module with:</p>
+<pre class="literal-block">
+$ npm install --save ws
+</pre>
+<p>First, let’s take an Arduino with a serial link to a Node.js host. To push
+data from that device with websockets would look as follows:</p>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">WebSocketServer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ws&#39;</span><span class="p">).</span><span class="nx">Server</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">board</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">firmata</span><span class="p">.</span><span class="nx">Board</span><span class="p">(</span><span class="nx">modem</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;connected \n&#39;</span><span class="p">);</span>
+  <span class="nx">board</span><span class="p">.</span><span class="nx">pinMode</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="nx">board</span><span class="p">.</span><span class="nx">MODES</span><span class="p">.</span><span class="nx">OUTPUT</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">wss</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocketServer</span><span class="p">({</span><span class="nx">server</span><span class="o">:</span> <span class="nx">server</span><span class="p">});</span>
+<span class="nx">wss</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">connection</span><span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">incoming</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;received: %s&#39;</span><span class="p">,</span> <span class="nx">message</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="nx">board</span><span class="p">.</span><span class="nx">digitalRead</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;{&quot;state&quot;: &#39;</span> <span class="o">+</span> <span class="nx">val</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

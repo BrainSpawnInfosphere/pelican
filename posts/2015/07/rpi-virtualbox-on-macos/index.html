@@ -1,0 +1,175 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>RPi Virtualbox on macOS | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Setting up Virtualbox"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/07/rpi-virtualbox-on-macos">RPi Virtualbox on macOS</a></h2>
+<h5><i class="icon-feather"></i> Fri 03 July 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="section" id="raspberry-pi-virtualbox-vm-setup">
+<h2>Raspberry Pi Virtualbox VM Setup</h2>
+<p>This HOWTO follows the work by <a class="reference external" href="http://russelldavis.org">Russell
+Davis</a> for setting up a cross compiling
+environment for the Raspberry Pi. I have modified his instructions to
+make them more ROS specific.</p>
+<p>If you don't already have Virtualbox and the Extension pack installed
+then you'll need to download it from
+<a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a>, choosing the correct one for
+your platform and also download the Extension Pack from the same page if
+you haven't already installed it. Once you have downloaded and installed
+Virtualbox+Extension pack for your platform move on to step 2.</p>
+<ol class="arabic simple">
+<li>You can download the Ubuntu iso from the <a class="reference external" href="http://www.ubuntu.com/download/ubuntu/download">Ubuntu
+website</a></li>
+<li>Once you have the Ubuntu iso downloaded, start Virtualbox and create
+a new Virtual machine by clicking the New button. Virtualbox will
+then start the Virtual Machine Wizard. Give your VM a name. I suggest
+something like RaspberryPi Development. Choose Linux &amp; Ubuntu from
+the dropdowns (or if you are not going to use Ubuntu as the guest os
+then select whichever distro you are going to use). It should look
+something like this</li>
+<li>Choose the amount of memory to allocate to the VM, give it 1 or 2 GB
+of ram.</li>
+<li>Create a virtual harddisk and choose VDI which will be dynamically
+allocated. Make it at least 8GB to hold everything. The harddisk will
+resize dynamically.</li>
+<li>Click the Create button. You will then be returned to the main
+Virtualbox screen with the VM you have just created highlighted click
+the Settings button.</li>
+<li>Now open up the setting for the VM you just created. The only setting
+you MUST change:</li>
+</ol>
+<ul class="simple">
+<li>storage</li>
+<li>networking</li>
+<li>video</li>
+</ul>
+<ol class="arabic simple" start="7">
+<li>Go to the storage tab and click the little CD icon. Add the iso you
+downloaded earlier from Ubuntu. This will only effect this boot
+cycle. After you install Linux, the disk image will automatically be
+removed.</li>
+<li>Go to the networking tab and ensure NAT is selected so you can see
+the interweb. This will also allow you to install updates and 3rd pa</li>
+<li>Go to the video tab and sensure 3D acceleration is turned off and
+there is enough video memory for your VM ... I selected 32 MB.</li>
+</ol>
+</div>
+<div class="section" id="install-linux">
+<h2>Install Linux</h2>
+<p>Now hit start on the Virtualbox screen and install Linux.</p>
+<p>If you this error message:</p>
+<pre class="literal-block">
+piix4_smbus 0000.00.07.0: SMBus base address uninitialized - upgrade bios or use force_addr=0xaddr
+</pre>
+<p>Fix based on work by <a class="reference external" href="http://finster.co.uk">Karl Foley</a>, in a
+terminal type:</p>
+<pre class="literal-block">
+sudo vi /etc/modprobe.d/blacklist.conf
+</pre>
+<p>Add the line blacklist i2c_piix4 to the end of the file and save</p>
+<pre class="literal-block">
+sudo update-initramfs -u -k all
+sudo reboot
+</pre>
+<p>Also make sure you have the development tools installed</p>
+<pre class="literal-block">
+sudo apt-get install build-essential
+</pre>
+<p>Also to reduce the size of the install, I uninstalled office, game, and
+other unneeded software.</p>
+</div>
+<div class="section" id="vm-commands">
+<h2>VM Commands</h2>
+<p>VBoxHeadless --startvm vb_ros</p>
+<p>VBoxManage controlvm vb_ros poweroff | pause | reset</p>
+</div>
+<div class="section" id="networking">
+<h2>Networking</h2>
+<p>In order for your vm to see the internet and other attached vm and
+computers, you must use a bridged connection. However on <strong>macOS</strong> the
+bridged network doesn't work if you are using a wireless connection
+(airport). A real wired connection works fine in macOS (10.8.2 tested).</p>
+</div>
+<div class="section" id="rpi-tool-chain-cross-compile-x86-to-arm">
+<h2>RPI Tool Chain (Cross compile x86 to ARM)</h2>
+<p>The Raspberry Pi Foundation is providing a ready-to-use toolchain on
+their github repository. You can use it to save yourself some time.</p>
+<p>To do so, you need to have git installed and to clone the repository</p>
+<pre class="literal-block">
+&gt; sudo apt-get install git-core
+&gt; git clone https://github.com/raspberrypi/tools.git --depth=1
+&gt; export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
+</pre>
+<p>The &quot;--depth=1&quot; is here to tell git we only want the last revision, and
+not the whole history to be cloned.</p>
+<p>Create a new file named test.cpp and copy/paste the following code:</p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Hello ARM world !</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>Then, enter the following commands:</p>
+<pre class="literal-block">
+&gt; arm-linux-gnueabihf-g++ test.cpp -o test
+&gt; file test
+test: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.26, BuildID[sha1]=0xfd72b5c6878433eb7f2296acceba9f648294a58c, not stripped
+</pre>
+<p>As you see, you can't execute this program on your PC. The file command
+tells you that this executable is built for ARM processors.</p>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

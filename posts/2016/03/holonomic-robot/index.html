@@ -1,0 +1,513 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Holonomic Robot | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Derivation of a holonomic robot's equations of motion"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/03/holonomic-robot">Holonomic Robot</a></h2>
+<h5><i class="icon-feather"></i> Sat 12 March 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>Robots come in a variety of types and configurations: wheeled, tracked, legs,
+flying, etc. Common wheeled robots typically have two wheels (directly driven)
+with a caster wheel to make the robot stable. There are some without the caster
+wheel and employ a control system to keep them upright (inverted pendulum
+problem) and resemble a Segway scooter. All of these two wheeled robot are
+non-holonomic systems.</p>
+<dl class="docutils">
+<dt><strong>Non-Holonomic System</strong></dt>
+<dd>A non-holonomic system in physics and mathematics is a system whose state
+depends on the path taken to achieve it. An automobile is an example of a
+non-holonomic vehicle. The vehicle has three degrees of freedom: its position
+in two axes, and its orientation relative to a fixed heading. Yet it has only
+two controllable degrees of freedom: acceleration/braking and the angle of the
+steering wheel—with which to control its position and orientation.
+<a class="footnote-reference" href="#wiki-non-holonomic" id="id1">[2]</a></dd>
+</dl>
+<p>Due to these constraints, a holonomic robot (figref{soccer_robot}) which could
+travel in any direction and immediately change its position and orientation is
+much more desirable. There are a variety of different wheels which make this
+type of robot possible such as mecanum or omni wheels (figref{wheel}). <a class="footnote-reference" href="#wheel-slip" id="id2">[5]</a> <a class="footnote-reference" href="#wheel-slip2" id="id3">[6]</a></p>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/holonomic_robot.png" style="width: 300px;" />
+<p class="caption">Holonomic soccer robot using 4 omni directional wheels and a kicking motor
+used to hit the red ball into a goal. <a class="footnote-reference" href="#soccer" id="id4">[1]</a></p>
+</div>
+<p>Omni wheels operate like standard wheels in that the force is produced normal
+to the motor's axis of rotation and as a result of friction. However, there are
+a series of smaller wheels which ring the main wheel and allow the wheel to
+slip in the direction of the motor rotational axis. Note that no force is
+produced parallel to the motor axis, just slippage.</p>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/omni_wheel.jpg" style="width: 300px;" />
+<p class="caption">Omni directional wheel allows movement in any direction. <a class="footnote-reference" href="#omniwheel" id="id5">[4]</a></p>
+</div>
+<p>Omni wheels allow you to decouple position and orientation. These are common in
+soccer robots.</p>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/omni_wheel_control.png" style="width: 500px;" />
+</div>
+<div class="section" id="holonomic-dynamics">
+<h2>Holonomic Dynamics</h2>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/robot_cs.png" style="width: 500px;" />
+<p class="caption">Coordinate system tied to the body of the robot with the origin located at
+the center of mass. Note that the x-axis points straight up and the y-axis
+points to the right. Also, the motor angle <span class="math">\(\phi\)</span> is defined as the angle
+measured from the y-axis. The forces (<span class="math">\(F\)</span>) are the results of the motors
+spinning in the positive direction according to the right hand rule. Note
+also that no force is produced parallel to the motor's axis of rotation.</p>
+</div>
+<p>The dynamics for a holonomic robot, such as figref{coordinate}, with 4 omni
+directional wheels (can be derived using Euler-Largrange (<span class="math">\(\mathcal{L}\)</span>) which
+defines a system's kinectic (<span class="math">\(T\)</span>) and potential (<span class="math">\(V\)</span>) energies in relation to a
+set of generalized coordinates (<span class="math">\(q\)</span>) and generalized forces (<span class="math">\(Q\)</span>):</p>
+<div class="math">
+\begin{equation*}
+\newcommand{\dpar}[2]{\frac{\partial #1}{\partial #2}}
+\end{equation*}
+</div>
+<div class="math">
+\begin{align*}
+\mathcal{L}=T-V \\
+\frac{d}{dt} \left\{ \dpar{ \mathcal{L} }{\dot q} \right\} - \dpar{ \mathcal{L} }{q} = Q \\
+T = \frac{1}{2}M v_w^2+ \frac{1}{2}J \dot \psi^2 + \frac{1}{2} J_w (\dot \theta_1^2 + \dot \theta_2^2 + \dot \theta_3^2 + \dot \theta_4^2) \\
+V = 0
+\end{align*}
+</div>
+<p>However, the dynamics must be calculated from an inertial reference frame
+(<span class="math">\({W}\)</span>) and take into account the rotating body frame dynamics
+(<span class="math">\({B'}\)</span>). Now, assume the body frame is offset from the center of mass (
+CM) by <span class="math">\(x_m\)</span> and <span class="math">\(y_m\)</span> which compose a vector <span class="math">\(r_m\)</span>. Thus the velocity
+of the robot in the rotating frame would be:</p>
+<div class="math">
+\begin{align*}
+v_w = v_{B'} + \dot \psi \times r_m \\
+v_w = v_{B'} +
+\begin{bmatrix}
+        0 &amp; 0 &amp; \dot \psi
+\end{bmatrix}^T
+\times
+\begin{bmatrix}
+        x_m &amp; y_m &amp; 0
+\end{bmatrix}^T
+=
+\begin{bmatrix}
+        \dot x &amp; \dot y &amp; 0
+\end{bmatrix}^T +
+\begin{bmatrix}
+        -y_m \dot \psi &amp; x_m \dot \psi &amp; 0
+\end{bmatrix}^T \\
+v_{B'} = \begin{bmatrix}
+        \dot x &amp; \dot y &amp; 0
+\end{bmatrix}^T
+\end{align*}
+</div>
+<p>where <span class="math">\(v_{B'}\)</span> is the speed of the body frame. Now substituting that into
+the above kinetic energy equation <span class="math">\(T\)</span>, we get:</p>
+<div class="math">
+\begin{align*}
+T = \frac{1}{2}M( ( \dot x - \dot \psi y )^2 + (\dot y + \dot \psi x)^2)+ \dots \\
+T = \frac{1}{2}M( \dot x^2 - 2 \dot \psi y_m \dot x +\dot \psi^2 y_m^2 + \dot y^2 + 2 \dot \psi x_m \dot y + \dot \psi^2 x_m^2)+ \frac{1}{2}J \dot \psi^2 + \frac{1}{2} J_w (\dot \theta_1^2 + \dot \theta_2^2 + \dot \theta_3^2 + \dot \theta_4^2)  \\
+\frac{d}{dt} \left\{ \dpar{ \mathcal{L} }{\dot x} \right\} = M ( \ddot x - \ddot \psi y - \dot \psi \dot y ) \hspace{1cm} \dpar{ \mathcal{L} }{x} = M(\dot \psi \dot y + \dot \psi^2 x) \\
+\frac{d}{dt} \left\{ \dpar{ \mathcal{L} }{\dot y} \right\} = M (\ddot y + \ddot \psi x + \dot \psi \dot x) \hspace{1cm} \dpar{ \mathcal{L} }{y} = M( -\dot \psi \dot x + \dot \psi^2 y) \\
+\frac{d}{dt} \left\{ \dpar{ \mathcal{L} }{\dot \psi} \right\} = J \ddot \psi \hspace{1cm} \dpar{ \mathcal{L} }{\phi} = 0 \\
+\frac{d}{dt} \left\{ \dpar{ \mathcal{L} }{\dot \theta} \right\} = J_w \sum \limits_{i=1}^4 \ddot \theta_i \hspace{1cm} \dpar{ \mathcal{L} }{\theta} = 0
+\end{align*}
+</div>
+<p>Now we make the following assumptions: <span class="math">\({B'}\)</span> is coincident with
+<span class="math">\({B}\)</span>, <span class="math">\(x_m = 0\)</span>, <span class="math">\(y_m = 0\)</span>, <span class="math">\(\dot x = v_x\)</span>,
+<span class="math">\(\dot y = v_y\)</span></p>
+<div class="math">
+\begin{align*}
+F_x = M (\ddot x - 2 \dot \psi \dot y ) \\
+F_y = M (\ddot y + 2 \dot \psi \dot x) \\
+T = J \ddot \psi \\
+\tau_w = J_w \ddot \theta_1 \hspace{1cm}
+\tau_w = J_w \ddot \theta_2 \hspace{1cm}
+\tau_w = J_w \ddot \theta_3 \hspace{1cm}
+\tau_w = J_w \ddot \theta_4
+\end{align*}
+</div>
+<div class="math">
+\begin{equation*}
+\begin{bmatrix}
+        F_x \\
+        F_y \\
+        T
+\end{bmatrix} =
+\begin{bmatrix}
+        M &amp; 0 &amp; 0 \\
+        0 &amp; M &amp; 0 \\
+        0 &amp; 0 &amp; J
+\end{bmatrix}
+\begin{bmatrix}
+        \ddot x \\
+        \ddot y \\
+        \ddot \psi
+\end{bmatrix} +
+\begin{bmatrix}
+        0 &amp; -2M \dot \psi &amp; 0 \\
+        2M \dot \psi &amp; 0 &amp; 0 \\
+        0 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+        \dot x \\
+        \dot y \\
+        \dot \psi
+\end{bmatrix}
+= \mathcal{M} \ddot X + \mathcal{O} \dot X = Q
+\end{equation*}
+</div>
+</div>
+<div class="section" id="world-coordinates">
+<h2>World Coordinates</h2>
+<p>Now the dynamics derived so far are all in the body frame and we could stop
+here and develop a controller which performs velocity control. However, position
+control is more useful and a transform needs to be performed to move the
+velocities and accelerations into the world frame.</p>
+<div class="math">
+\begin{align*}
+\dot X^W = R_B^W \dot X^B \\
+R_B^W =
+\begin{bmatrix}
+        \cos \psi &amp; \sin \psi &amp; 0 \\
+        -\sin \psi &amp; \cos \psi &amp; 0 \\
+        0 &amp; 0 &amp; 1
+\end{bmatrix} \\
+\ddot X^W = \dot R_B^W \dot X^B + R_B^W \ddot X^B \\
+\dot R_B^W =
+\begin{bmatrix}
+        \sin \psi &amp; -\cos \psi &amp; 0 \\
+        \cos \psi &amp; \sin \psi &amp; 0 \\
+        0 &amp; 0 &amp; 1
+\end{bmatrix}
+\end{align*}
+</div>
+<p>Now, substituting this into the dynamics, gives dynamics in the world
+coordinate system of:</p>
+<div class="math">
+\begin{align*}
+F = \mathcal{M} (\dot R \dot X + R \ddot X )  + \mathcal{O} R \dot X \\
+F = \mathcal{M} R \ddot X + (\mathcal{M}  \dot R + \mathcal{O} R) \dot X
+\end{align*}
+</div>
+</div>
+<div class="section" id="external-forces-and-torques">
+<h2>External Forces and Torques</h2>
+<p>Now looking at figure ref{robot} and summing the forces into their body
+referenced <span class="math">\(x\)</span> and <span class="math">\(y\)</span> directions and the torque about the
+<span class="math">\(z\)</span> axis, gives us:</p>
+<div class="math">
+\begin{align*}
+\sum F_x=f_1 \sin(\phi) - f_2 \sin(\phi) - f_3 \sin(\phi) + f_4 \sin(\phi)  \label{two} \\
+\sum F_y=f_1 \cos(\phi) + f_2 \cos(\phi) - f_3 \cos(\phi) - f_4 \cos(\phi) \label{three} \\
+\sum T=L(f_1+f_2+f_3+f_4) \label{four}
+\end{align*}
+</div>
+<p>Additionally, we can simplify this by assuming all of the angles are the same
+(e.g., <span class="math">\(\phi_1 = \phi_2 = \phi_3 = \phi_4\)</span>) and can now put this into a
+matrix form:</p>
+<div class="math">
+\begin{equation*}
+\begin{bmatrix}
+        F_x \\
+        F_y \\
+        T
+\end{bmatrix} =
+\begin{bmatrix}
+        \sin(\phi) &amp; 0 &amp; 0 \\
+        0 &amp; \cos(\phi) &amp; 0 \\
+        0 &amp; 0 &amp; L
+\end{bmatrix}
+\begin{bmatrix}
+        1 &amp; -1 &amp; -1 &amp; 1\\
+        1 &amp; 1 &amp; -1 &amp; -1\\
+        1 &amp; 1 &amp; 1&amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+        f_1 \\
+        f_2 \\
+        f_3 \\
+        f_4
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>where <span class="math">\(\phi\)</span> is again the angle of the motors as defined in figref{robot},
+<span class="math">\(f_i\)</span> is the magnitude of the force produced by the motors, and <span class="math">\(L\)</span>
+is the radius of the robot.</p>
+<p>where <span class="math">\(pinv()\)</span> [#pinv]_is defined as the pseudoinverse since <cite>A(phi)</cite> is not a square matrix. Finally, substituting these into the original equation, we can calculate the torques given the desired accelerations.</p>
+<div class="math">
+\begin{equation*}
+\begin{bmatrix} \tau_1 \\  \tau_2 \\  \tau_3 \\  \tau_4 \end{bmatrix} = \frac {M r_w} {4}
+\begin{bmatrix}
+        -1 &amp; 1 &amp; 1 \\
+        -1 &amp; -1 &amp; 1 \\
+        1 &amp; -1 &amp; 1 \\
+        1 &amp; 1 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+        \frac{1}{\sin(\phi)} &amp; 0 &amp; 0 \\
+        0 &amp; \frac{1}{\cos(\phi)} &amp; 0 \\
+        0 &amp; 0 &amp; \frac{1}{2}
+\end{bmatrix}
+\begin{bmatrix}
+        a_x \\
+        a_y \\
+        R \dot \omega
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>Now looking at this equation, we notice that <span class="math">\(\phi\)</span> can not be equal to
+0, 90, 180, 270, or 360 otherwise we get a singularity in the <span class="math">\(A(\phi)\)</span>
+matrix. This however is not an issue in the real world, since the motors would
+occupy the same physical space and the robot would essentially only have 2 and
+not 4 motors.</p>
+</div>
+<div class="section" id="holonomic-robot-kinematics">
+<h2>Holonomic Robot Kinematics</h2>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/force_cs.png" style="width: 500px;" />
+<p class="caption">Configuration of three groups of motors where <span class="math">\(\phi\)</span> is 30, 45, and 60 degrees.</p>
+</div>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/equiv_motors.png" />
+<p class="caption">Number of equivalent motors for any direction under linear movement only, no rotational movement allowed.</p>
+</div>
+<!-- \begin{figure*}[tb] -->
+<!-- \begin{minipage}[htb]{3in} -->
+<!-- \centering -->
+<!-- \includegraphics[height=2.8in]{pics/force_cs.png} -->
+<!-- \caption{\label{robot}Configuration of three groups of motors where `\phi` is 30, 45, and 60 degrees.} -->
+<!-- \end{minipage} -->
+<!-- \hfill -->
+<!-- \begin{minipage}[htb]{3in} -->
+<!-- \centering -->
+<!-- \includegraphics[height =2.8in]{pics/equiv_motors.png} -->
+<!-- \caption{\label{fig:equivalent_motors} Number of equivalent motors for any direction under linear movement only, no rotational movement allowed.} -->
+<!-- \end{minipage} -->
+<!-- \end{figure*} -->
+<p>Now performing a similar exercise for what was done with the dynamics, looking
+at <cite>coordinate</cite>, the velocity of motor 1is given by
+<span class="math">\(v_1 = -\sin(\phi) v_x + \cos(\phi) v_y + R \omega\)</span>. Performing this for
+each wheel gives:</p>
+<div class="math">
+\begin{equation*}
+\begin{bmatrix}
+        v_1 \\
+        v_2 \\
+        v_3 \\
+        v_4
+\end{bmatrix} =
+\begin{bmatrix}
+        -\sin(\phi)  &amp; \cos(\phi) &amp; L \\
+        -\sin(\phi) &amp; -\cos(\phi) &amp; L \\
+         \sin(\phi) &amp; -\cos(\phi) &amp; L \\
+         \sin(\phi)  &amp; \cos(\phi) &amp; L
+\end{bmatrix}
+\begin{bmatrix}
+        v_x \\
+        v_y \\
+        \omega
+\end{bmatrix} =
+\begin{bmatrix}
+        -1 &amp; 1 &amp; 1 \\
+        -1 &amp; -1 &amp; 1 \\
+        1 &amp; -1 &amp; 1 \\
+        1 &amp; 1 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+        \sin(\phi) &amp; 0 &amp; 0 \\
+        0 &amp; \cos(\phi) &amp; 0 \\
+        0 &amp; 0 &amp; L
+\end{bmatrix}
+\begin{bmatrix}
+        v_x \\
+        v_y \\
+        \omega
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>Now setting <span class="math">\(\omega\)</span> to zero and calculating only linear movement, we can
+determine the number of equivalent motors as shown in
+figref{fig:equivalent_motors}. For example, setting
+<span class="math">\(\phi\)</span> to 30 <span class="math">\(^\circ\)</span> (the red line in figref{fig:equivalent_motors})
+and traveling in the x direction only (<span class="math">\(\begin{bmatrix} v_x &amp; v_y &amp; \omega \end{bmatrix}^T = \begin{bmatrix}1&amp; 0 &amp; 0 \end{bmatrix}^T\)</span>),
+the above equation simplifies to <span class="math">\(4 \sin(30)\)</span> or 2 equivalent motors.
+Repeating for the y direction results in <span class="math">\(4 \cos(30)\)</span> or 3.46 equivalent
+motors.</p>
+<p>Now it is interesting to note that when <span class="math">\(\phi\)</span> is set to 30 <span class="math">\(^\circ\)</span>,
+the robot has more equivalent motors when going forward or backwards, while a
+<span class="math">\(\phi\)</span> of 60 <span class="math">\(^\circ\)</span> provides more equivalent motors moving left or right.
+When the motors are are angled at 45 <span class="math">\(^\circ\)</span>, movement is clearly equally
+optimized for both forward/backwards and left/right ( <span class="math">\(2 \sin(45)\)</span> is 2.83 motors)
+movement.</p>
+<p>figref{fig:equivalent_motors} tells us that no mater how the 4 motors are
+oriented in a realistic configuration, the robot will never have the equivalent
+use of all 4 motors. Movement in one direction or another can be optimized, but
+then a sacrifice is made in another direction. This fact is intuitively obvious.</p>
+<p>Another issue is these results are also ideal. This logic assumes that the wheels
+will not slip and have good traction in any orientation. Unfortunately real world
+results do not mimic this situation and the robot's performance will be reduced.</p>
+</div>
+<div class="section" id="references">
+<h2>References</h2>
+<table class="docutils footnote" frame="void" id="soccer" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[1]</a></td><td>Alexander Gloye, Raul Rojas, Holonomic Control of a Robot with an Omnidirectional Drive, accepted for publication by Künstliche Intelligenz, Springer-Verlag, 2006.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="wiki-non-holonomic" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[2]</a></td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Non-holonomic_system">http://en.wikipedia.org/wiki/Non-holonomic_system</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="wiki-lagrange" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[3]</td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Lagrangian_mechanics">http://en.wikipedia.org/wiki/Lagrangian_mechanics</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="omniwheel" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td><a class="reference external" href="http://www.kornylak.com">http://www.kornylak.com</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="wheel-slip" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[5]</a></td><td><ol class="first last upperalpha simple" start="18">
+<li>Balakrishna, Ashitava Ghosal, &quot;Modeling of Slip for Wheeled Mobile Robots,&quot; lEEE TRANSACTIONS ON ROBOTICS AND AUTOMATION, VOL. I I , NO. I , FEBRUARY 1995, pp. 126-132</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="wheel-slip2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[6]</a></td><td><ol class="first last upperalpha simple" start="10">
+<li>Agullo, S. Cardona, and J. Vivancos, “Kinematics of vehicles with directional sliding wheels,” Mechanisms and Muchine Theory, vol. 22, no. 4, pp. 295-301, 1987.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="pinv" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[7]</td><td>Pseudoinverse: for m &gt; n: <span class="math">\(A_{left}^{-1}=(A^TA)^{-1}A^T\)</span> or m &lt; n: <span class="math">\(A_{right}^{-1}=A^T(AA^T)^{-1}\)</span> such that <span class="math">\(AA^{-1}=I\)</span> or <span class="math">\(A^{-1}A=I\)</span></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="wheelchair" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[8]</td><td>Masayoshi Wada (2010). Motion Control of a Four-wheel-drive Omnidirectional Wheelchair with High Step Climbing Capability, Climbing and Walking Robots, Behnam Miripour (Ed.), ISBN: 978-953-307-030-8, InTech, Available from: <a class="reference external" href="http://www.intechopen.com/books/climbing-and-walking-robots/motion-control-of-a-four-wheeldrive-omnidirectional-wheelchair-with-high-step-climbing-capability">http://www.intechopen.com/books/climbing-and-walking-robots/motion-control-of-a-four-wheeldrive-omnidirectional-wheelchair-with-high-step-climbing-capability</a></td></tr>
+</tbody>
+</table>
+</div>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "left",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

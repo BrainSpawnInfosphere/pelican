@@ -1,0 +1,173 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Adafruit BNO055 (IMU) | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Getting Adafruit's AHRS (BNO055 IMU) working with RPi3"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/03/adafruit-bno055-imu">Adafruit BNO055 (IMU)</a></h2>
+<h5><i class="icon-feather"></i> Sun 27 March 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/bno055.jpg" style="width: 300px;" />
+</div>
+<div class="section" id="warning">
+<h2>Warning</h2>
+<p>Adafruit's <a class="reference external" href="https://www.adafruit.com/products/2472">Absolute Orientation IMU</a>
+includes a Attitude Heading Reference System (AHRS) which always determines the
+orientation of the IMU. It has both serial and I2C output and a serial port
+output. This sensor has two issues:</p>
+<ol class="arabic simple">
+<li>For I2C, it often does clock stretching which the RPi doesn't like, so you
+have to use the serial port</li>
+<li>On the RPi v3, the hardware serial port is attached to the bluetooth module,
+so you either have to turn off bluetooth or use a usb-to-serial converter.
+Also, you have to tell the RPi to not connect a login terminal to the serial
+port.</li>
+</ol>
+<p>Also note, the imu is built for cell phones and uses either the Andriod or Windows
+phone coordinate system. This  results in the AHRS reporting values different
+from traditional aerospace coordinate systems.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="29%" />
+<col width="29%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">&nbsp;</th>
+<th class="head">&nbsp;</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Roll</td>
+<td>y-axis</td>
+<td>x-axis</td>
+</tr>
+<tr><td>Pitch</td>
+<td>x-axis</td>
+<td>y-axis</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="specs">
+<h2>Specs</h2>
+<p>The BNO055 can output the following sensor data:</p>
+<ul class="simple">
+<li>Default Address: <tt class="docutils literal">0x28</tt> or can be changed to <tt class="docutils literal">0x29</tt> via the ADR pin</li>
+<li>Absolute Orientation (Euler Vector, 100Hz) Three axis orientation data based on a 360° sphere</li>
+<li>Absolute Orientation (Quaterion, 100Hz) Four point quaternion output for more accurate data manipulation</li>
+<li>Angular Velocity Vector (100Hz) Three axis of 'rotation speed' in <span class="math">\(rad/s\)</span></li>
+<li>Acceleration Vector (100Hz) Three axis of acceleration (gravity + linear motion) in <span class="math">\(m/s^2\)</span></li>
+<li>Magnetic Field Strength Vector (20Hz) Three axis of magnetic field sensing in micro Tesla (uT)</li>
+<li>Linear Acceleration Vector (100Hz) Three axis of linear acceleration data (acceleration minus gravity) in <span class="math">\(m/s^2\)</span></li>
+<li>Gravity Vector (100Hz) Three axis of gravitational acceleration (minus any movement) in <span class="math">\(m/s^2\)</span></li>
+<li>Temperature (1Hz) Ambient temperature in degrees celsius</li>
+</ul>
+</div>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "left",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>
