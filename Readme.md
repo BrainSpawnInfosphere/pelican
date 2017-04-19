@@ -2,7 +2,7 @@
 
 # Github Pages
 
-[![Build Status](https://travis-ci.org/walchko/walchko.github.io.svg?branch=master)](https://travis-ci.org/walchko/walchko.github.io)
+[![Build Status](https://travis-ci.org/walchko/pelican.svg?branch=master)](https://travis-ci.org/walchko/pelican)
 
 This is how I used Pelican to create a static website to host a personal page
 on Github.
