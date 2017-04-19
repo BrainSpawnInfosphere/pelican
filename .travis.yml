@@ -21,8 +21,8 @@ install:
     - pip install -U pelican
 
 script:
-    # - make html
-    - ls
+    - make html
+    # - ls
 
 deploy:
     provider: pages
