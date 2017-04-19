@@ -18,7 +18,6 @@ Useful Commands Descriptions
 =============== ===============
 make html       creates the website
 make clean      deletes the current website output
-make github     uploads the files github
 =============== ===============
 
 Setup
@@ -43,8 +42,8 @@ Publishing
 I use travis-ci publisher to build and publish to my github website. The yaml
 file below uses a github access token to push the pages to the gh-pages branch.
 
- code-include:: ../../.travis.yml
- 	lexer bash
+ .. code-include:: ../../.travis.yml
+ 	:lexer: yaml
 
 Pygments
 -----------
