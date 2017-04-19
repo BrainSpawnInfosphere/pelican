@@ -1,0 +1,148 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Node.js | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Install and use Node.js"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/09/nodejs">Node.js</a></h2>
+<h5><i class="icon-feather"></i> Thu 03 September 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="figure align-center">
+<img alt="" src="../../../../blog/raspbian/pics/nodejs.png" style="width: 200px;" />
+</div>
+<div class="section" id="installing-node-js">
+<h2>Installing Node.js</h2>
+<p>The Raspbian software is old, you need to use another source. Following the <a class="reference external" href="https://nodejs.org/en/download/package-manager/">directions
+on node.js</a> do the following:</p>
+<pre class="literal-block">
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+sudo apt-get install -y nodejs
+</pre>
+<p>Unfortunately this appears to install <tt class="docutils literal">node</tt> to <tt class="docutils literal">/usr/lib</tt> instead of
+<tt class="docutils literal">/usr/local/lib</tt>.</p>
+</div>
+<div class="section" id="packages">
+<h2>Packages</h2>
+<p>Nodejs uses Node Package Manager (npm) for add/removing packages. The
+best way is to build a package.json file in your project and run
+<tt class="docutils literal">npm install</tt> to get what you need. See these
+<a class="reference external" href="https://docs.npmjs.com/">tutorials</a> for more info.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Command Cheatsheet</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>adduser</td>
+<td>Create a user account on npmjs.com</td>
+</tr>
+<tr><td>cache clean</td>
+<td>Clean up old packages in the cache</td>
+</tr>
+<tr><td>config list</td>
+<td>List config settings</td>
+</tr>
+<tr><td>config get prefix</td>
+<td>Get path to global location</td>
+</tr>
+<tr><td>config set prefix=$HOME/.node</td>
+<td>Set the global location</td>
+</tr>
+<tr><td>init</td>
+<td>Create a new <tt class="docutils literal">package.json</tt> file</td>
+</tr>
+<tr><td>install [-g|--global]</td>
+<td>Install packages locally or to the global location</td>
+</tr>
+<tr><td>install &lt;pgk&gt; --save</td>
+<td>Install package and save it to <tt class="docutils literal">package.json</tt></td>
+</tr>
+<tr><td>list [-g|--global]</td>
+<td>List packages locally or globally</td>
+</tr>
+<tr><td>list --depth=0</td>
+<td>List packages, but only print top level</td>
+</tr>
+<tr><td>outdated [-g|--global]</td>
+<td>Check for outdated packages</td>
+</tr>
+<tr><td>uninstall [-g|--global]</td>
+<td>Uninstall packages locally or from the global location</td>
+</tr>
+<tr><td>update [-g|--global]</td>
+<td>Update packages locally or globally</td>
+</tr>
+<tr><td>search &lt;pkg&gt;</td>
+<td>Search npmjs.com for a package</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="useful-packages">
+<h2>Useful Packages</h2>
+<p>Run a simple file server:</p>
+<pre class="literal-block">
+npm install -g httpserver
+httpserver 8080 localhost
+</pre>
+<ul class="simple">
+<li>httpserver</li>
+<li>archeyjs</li>
+</ul>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

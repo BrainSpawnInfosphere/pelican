@@ -1,0 +1,104 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>macOS Command Line | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Setting up your command line on macOS"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/06/macos-command-line">macOS Command Line</a></h2>
+<h5><i class="icon-feather"></i> Sat 25 June 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>So I setup the following using <cite>homebrew</cite>:</p>
+<ul class="simple">
+<li>Bash 4</li>
+<li><cite>bash-git-prompt</cite></li>
+<li><cite>bash-completion</cite></li>
+</ul>
+<div class="section" id="bash-4">
+<h2>Bash 4</h2>
+<pre class="literal-block">
+brew install bash
+sudo bash -c &quot;echo /usr/local/bin/bash &gt;&gt; /etc/shells&quot;
+chsh -s /usr/local/bin/bash
+
+# test if it works
+echo $BASH &amp;&amp; echo $BASH_VERSION
+</pre>
+</div>
+<div class="section" id="git-prompt">
+<h2>Git Prompt</h2>
+<p>To setup git prompt for bash, have a look at my <a class="reference external" href="https://github.com/walchko/dotfiles">dotfiles</a>
+and take a look at <tt class="docutils literal"><span class="pre">.git-prompt-colors.sh</span></tt> to see how I set it up. There are
+lots of themes and defaults to play with.</p>
+<pre class="literal-block">
+override_git_prompt_colors() {
+  GIT_PROMPT_THEME_NAME=&quot;Custom&quot; # needed for reload optimization, should be unique
+
+  GIT_PROMPT_START_USER=&quot;${Green}\u&#64;${BoldBlue}\\h ${Cyan}\W&quot;
+  GIT_PROMPT_END_USER=&quot;${ResetColor} $ &quot;
+  GIT_PROMPT_END_ROOT=&quot;${BoldRed} # &quot;
+}
+
+# load the theme
+reload_git_prompt_colors &quot;Custom&quot;
+</pre>
+</div>
+<div class="section" id="bash-completion">
+<h2>Bash Completion</h2>
+<p>Ditto with bash completion, look at my dotfiles to show one way to do it:</p>
+<pre class="literal-block">
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+</pre>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

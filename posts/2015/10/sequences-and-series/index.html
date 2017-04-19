@@ -1,0 +1,282 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sequences and Series | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Infinite series summary"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/10/sequences-and-series">Sequences and Series</a></h2>
+<h5><i class="icon-feather"></i> Sun 11 October 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="section" id="sequence">
+<h2>Sequence</h2>
+<p>A <strong>sequence</strong> is an ordered list of numbers (e.g., <span class="math">\(a_n\)</span>); the numbers are called
+&quot;elements&quot; or &quot;terms&quot;. Every convergent sequence is bounded, thus an unbounded sequence
+is divergent.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="60%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Sequence Test</th>
+<th class="head">Converge</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Squeeze Theorem</td>
+<td><span class="math">\(\lim\limits_{n \to \infty} a_n = \lim\limits_{n \to \infty} c_n = L\)</span> then <span class="math">\(\lim\limits_{n \to \infty} b_n = L\)</span></td>
+<td><span class="math">\(a_n \le b_n \le c_n\)</span></td>
+</tr>
+<tr><td>Def 1, pg 692</td>
+<td><span class="math">\(\lim\limits_{n \to \infty} a_n = L\)</span></td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>l'Hospital's Rule</td>
+<td><span class="math">\(\lim\limits_{n \to \infty} \frac{f(x)}{g(x)} \Rightarrow \lim\limits_{n \to \infty} \frac{f'(x)}{g'(x)}\)</span></td>
+<td>where <span class="math">\(f(x)\)</span> = numerator and <span class="math">\(g(x)\)</span> = denominator</td>
+</tr>
+<tr><td>Theorem 3, pg 693</td>
+<td>if <span class="math">\(f(n) = a_n\)</span> then <span class="math">\(\lim\limits_{n \to \infty} f(x)=L\)</span></td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Theorem 6, pg 694</td>
+<td><span class="math">\(\lim\limits_{n \to \infty} | a_n | =0\)</span> then <span class="math">\(a_n\)</span> converges</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Theorem 9, pg 696</td>
+<td><span class="math">\(\lim\limits_{n \to \infty} r^n = \begin{cases} 0, &amp; \text{if } -1 &lt; r &lt; 1 \\ 1, &amp; \text{if } r = 1 \end{cases}\)</span></td>
+<td>Divergent for all other values of <span class="math">\(r\)</span></td>
+</tr>
+<tr><td>Theorem 12, pg 698</td>
+<td>Every bounded (<span class="math">\(m \le a_n \le M\)</span>), monotonic sequence is convergent</td>
+<td>The bounds exists for <span class="math">\(n \ge 1\)</span>, also see Theorem 10 and 11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="series">
+<h2>Series</h2>
+<p>A <strong>series</strong> is the sum of the terms of a sequence: <span class="math">\(\sum\limits_{n=1}^\infty a_n\)</span>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="31%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Series Test</th>
+<th class="head">Converge</th>
+<th class="head">Diverge</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Divergence</td>
+<td>N/A</td>
+<td><span class="math">\(\lim\limits_{n\to\infty} a_n \ne 0\)</span></td>
+<td>Doesn't show convergence and the converse is not true</td>
+</tr>
+<tr><td>Integral</td>
+<td>if <span class="math">\(\int\limits_1^\infty f(x) dx\)</span> converges</td>
+<td>if <span class="math">\(\int\limits_1^\infty f(x) dx\)</span> diverges</td>
+<td><span class="math">\(f(x)\)</span> must be positive, decreasing, and continous, also <span class="math">\(f(n) = a_n \text{ for all } n\)</span></td>
+</tr>
+<tr><td>Root</td>
+<td><span class="math">\(\lim\limits_{n\to\infty}\sqrt[n]{|a_n|} = L &lt; 1\)</span></td>
+<td><span class="math">\(\lim\limits_{n\to\infty}\sqrt[n]{|a_n|} = L &gt; 1 \text{ or } \infty\)</span></td>
+<td>inconclusive if <span class="math">\(L = 1\)</span></td>
+</tr>
+<tr><td>Ratio</td>
+<td><span class="math">\(\lim\limits_{n\to\infty} \left| \frac{a_{n+1}}{a_n}\right| = L &lt; 1\)</span></td>
+<td><span class="math">\(\lim\limits_{n\to\infty} \left| \frac{a_{n+1}}{a_n}\right| = L &gt; 1 \text{ or } \infty\)</span></td>
+<td>inconclusive if <span class="math">\(L = 1\)</span></td>
+</tr>
+<tr><td>Direct Comparison</td>
+<td><span class="math">\(0 \le a_n \le b_n  \text{ for all } n\)</span> and <span class="math">\(\sum\limits_{n=1}^{\infty} b_n\)</span> converges</td>
+<td><span class="math">\(0 \le b_n \le a_n  \text{ for all } n\)</span> and <span class="math">\(\sum\limits_{n=1}^{\infty} b_n\)</span> diverges</td>
+<td><span class="math">\(a_n,b_n &gt; 0\)</span></td>
+</tr>
+<tr><td>Limit Comparison</td>
+<td><span class="math">\(\lim\limits_{n\to\infty} \frac{a_n}{b_n} = L\)</span> and <span class="math">\(\sum\limits_{n=1}^{\infty} b_n\)</span> converges</td>
+<td><span class="math">\(\lim\limits_{n\to\infty} \frac{a_n}{b_n} = L\)</span> and <span class="math">\(\sum\limits_{n=1}^{\infty} b_n\)</span> diverges</td>
+<td><span class="math">\(a_n,b_n &gt; 0\)</span> and L is a positive constant, if L is <span class="math">\(\infty\)</span> or 0, then pick a different <span class="math">\(b_n\)</span></td>
+</tr>
+<tr><td>Absolute</td>
+<td><span class="math">\(\sum\limits_{n=1}^{\infty} | a_n | = 0\)</span></td>
+<td>&nbsp;</td>
+<td>Definition of absolutely convergent, the sum is independent of the order in which the terms are summed</td>
+</tr>
+<tr><td>Conditional</td>
+<td><span class="math">\(\sum\limits_{n=1}^{\infty} | a_n |\)</span> diverges but <span class="math">\(\sum\limits_{n=1}^{\infty} a_n\)</span> converges</td>
+<td>&nbsp;</td>
+<td>The sum is dependent of the order in which the terms are summed</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="common-series">
+<h2>Common Series</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="13%" />
+<col width="30%" />
+<col width="28%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Series Test</th>
+<th class="head">Formula</th>
+<th class="head">Converge</th>
+<th class="head">Diverge</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Alternating</td>
+<td><span class="math">\(\sum\limits_{n=1}^\infty (-1)^{n-1} a_n\)</span></td>
+<td><span class="math">\(0 &lt; a_{n+1} \le a_n \text{ for all } n\)</span> and <span class="math">\(\lim\limits_{n \to \infty} a_n = 0\)</span></td>
+<td>N/A</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>Geometric</td>
+<td><span class="math">\(\sum\limits_{n=1}^\infty ar^{n-1}\)</span></td>
+<td><span class="math">\(|r| &lt; 1\)</span> and converges to <span class="math">\(\frac{a}{1-r}\)</span></td>
+<td><span class="math">\(|r| \ge 1\)</span></td>
+<td>finite sum of the first n terms: <span class="math">\(= \frac{a(1-r^n)}{1-r}\)</span></td>
+</tr>
+<tr><td>P-Series</td>
+<td><span class="math">\(\sum\limits_{n=1}^\infty \frac{1}{n^p}\)</span></td>
+<td><span class="math">\(p &gt; 1\)</span></td>
+<td><span class="math">\(p \le 1\)</span></td>
+<td>cannot calculate sum</td>
+</tr>
+<tr><td>Power</td>
+<td><span class="math">\(\sum\limits_{n=0}^\infty c_n (x-a)^n\)</span></td>
+<td><span class="math">\(\begin{array}{l} i,  \text{converge if } x=a \\  ii,  \text{converge for all } x \\ iii,  \text{converge if } |x-a|&lt;R \end{array}\)</span></td>
+<td>&nbsp;</td>
+<td><span class="math">\(R\)</span> is the radius of convergence, you need to check the end points for convergence too. Typically use Ratio Test.</td>
+</tr>
+<tr><td>Taylor</td>
+<td><span class="math">\(\sum\limits_{n=0}^\infty \frac{f^n (a)}{n!} (x-a)^n\)</span></td>
+<td><span class="math">\(|x-a|&lt;R\)</span></td>
+<td><span class="math">\(|x-a|&gt;R\)</span></td>
+<td>Taylor series is centered about a. Same note as power series</td>
+</tr>
+<tr><td>Maclaurin</td>
+<td><span class="math">\(\sum\limits_{n=0}^\infty \frac{f^n (0)}{n!} (x)^n\)</span></td>
+<td><span class="math">\(|x|&lt;R\)</span></td>
+<td><span class="math">\(|x|&gt;R\)</span></td>
+<td>A Macluarin series is a Taylor series centered about 0. Same note as power series</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "left",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

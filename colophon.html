@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>This Website</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content=""><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="./theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="./theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href=".">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="./about.html">About Me</a></li>
+  <li><a href="./colophon.html">Colophon</a></li>
+  <li><a href="./categories.html">Topics</a></li>
+  <li><a href="./archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+    <h1>This Website</h1>
+    
+
+    <div class="section" id="construction">
+<h2>Construction</h2>
+<p>This site is created using <a class="reference external" href="https://github.com/getpelican/pelican">Pelican</a>.
+Pelican has a number of useful plug-ins and themes. The webpages and/or posts
+can be written in restructured text (rst) or markdown (md) and uses python's
+doctools to convert it into a web site.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Useful Commands</th>
+<th class="head">Descriptions</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>make html</td>
+<td>creates the website</td>
+</tr>
+<tr><td>make clean</td>
+<td>deletes the current website output</td>
+</tr>
+<tr><td>make github</td>
+<td>uploads the files github</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="setup">
+<h2>Setup</h2>
+<p>The pelican configuration file (<tt class="docutils literal">peliconconf.py</tt>) I used is shown below:</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*- #</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
+<span class="c1"># coloring code snipets</span>
+<span class="c1"># pygmentize -S monokai -f html -a .highlight &gt; pygment.css</span>
+<span class="c1"># pygmentize -f html -a .highligh &gt; pygment.css</span>
+
+<span class="n">AUTHOR</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;walchko&#39;</span>
+<span class="n">SITENAME</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;Planet Express&#39;</span>
+<span class="n">SITESUBTITLE</span> <span class="o">=</span> <span class="s2">&quot;Our crew is replaceable. Your package isn&#39;t.&quot;</span>
+<span class="n">SITEURL</span> <span class="o">=</span> <span class="s1">&#39;http://walchko.github.io/&#39;</span>
+
+<span class="n">PATH</span> <span class="o">=</span> <span class="s1">&#39;content&#39;</span>
+
+<span class="c1"># DELETE_OUTPUT_DIRECTORY = False don&#39;t use this, it wipes the .git directory</span>
+<span class="c1"># OUTPUT_PATH = &#39;/Users/kevin/google_drive/github/walchko.github.io/&#39;</span>
+
+<span class="n">TIMEZONE</span> <span class="o">=</span> <span class="s1">&#39;US/Mountain&#39;</span>
+
+<span class="n">DEFAULT_LANG</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;en&#39;</span>
+
+<span class="c1"># Feed generation is usually not desired when developing</span>
+<span class="n">FEED_ALL_ATOM</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">CATEGORY_FEED_ATOM</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">TRANSLATION_FEED_ATOM</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">AUTHOR_FEED_ATOM</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">AUTHOR_FEED_RSS</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="n">DEFAULT_PAGINATION</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">PLUGIN_PATHS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;./pelican-plugins&#39;</span><span class="p">]</span>
+
+<span class="c1"># PLUGINS = [&quot;render_math&quot;, &#39;code_include&#39;, &#39;simple_footnotes&#39;, &#39;sitemap&#39;]</span>
+<span class="n">PLUGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;render_math&quot;</span><span class="p">,</span> <span class="s1">&#39;code_include&#39;</span><span class="p">,</span> <span class="s1">&#39;sitemap&#39;</span><span class="p">]</span>
+<span class="c1"># render_math - latex equations</span>
+<span class="c1"># sitemap - for spiders, listed in robot.txt</span>
+<span class="c1"># code_include - include code from other files</span>
+<span class="c1"># simple_footnotes - may not use</span>
+
+<span class="n">MATH_JAX</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;align&#39;</span><span class="p">:</span> <span class="s1">&#39;left&#39;</span><span class="p">}</span>
+
+<span class="n">USE_FOLDER_AS_CATEGORY</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="n">STATIC_PATHS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;blog/engineering/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/macOS/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/raspbian/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/robots/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/cyber/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/computers/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/arch_linux/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/programming/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blog/repo/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pages/pics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pages/Publications&#39;</span><span class="p">,</span>
+    <span class="c1"># &#39;images&#39;,</span>
+    <span class="s1">&#39;extra/robots.txt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extra/favicon.ico&#39;</span>
+<span class="p">]</span>
+
+<span class="n">EXTRA_PATH_METADATA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;extra/robots.txt&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;robots.txt&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;extra/favicon.ico&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;favicon.ico&#39;</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># used by sitemap plugin and robots.txt</span>
+<span class="n">SITEMAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;priorities&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s1">&#39;indexes&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s1">&#39;pages&#39;</span><span class="p">:</span> <span class="mf">0.5</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;changefreqs&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="s1">&#39;monthly&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indexes&#39;</span><span class="p">:</span> <span class="s1">&#39;daily&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pages&#39;</span><span class="p">:</span> <span class="s1">&#39;monthly&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">GITHUB_ADDRESS</span> <span class="o">=</span> <span class="s1">&#39;http://github.com/walchko&#39;</span>
+<span class="n">SO_ADDRESS</span> <span class="o">=</span> <span class="s1">&#39;http://stackoverflow.com/users/5374768/kevin&#39;</span>
+<span class="n">SE_ADDRESS</span> <span class="o">=</span> <span class="s1">&#39;http://raspberrypi.stackexchange.com/users/1677/kevin&#39;</span>
+
+<span class="c1"># number of words in a summary</span>
+<span class="n">SUMMARY_MAX_LENGTH</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">DEFAULT_DATE_FORMAT</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;%a </span><span class="si">%d</span><span class="s1"> %B %Y&#39;</span><span class="p">)</span>
+
+<span class="n">THEME</span> <span class="o">=</span> <span class="s1">&#39;./themes/kevin&#39;</span>
+
+<span class="n">ARTICLE_URL</span> <span class="o">=</span> <span class="s2">&quot;posts/{date:%Y}/{date:%m}/{slug}&quot;</span>
+<span class="n">ARTICLE_SAVE_AS</span> <span class="o">=</span> <span class="s2">&quot;posts/{date:%Y}/{date:%m}/{slug}/index.html&quot;</span>
+
+<span class="n">CATEGORY_URL</span> <span class="o">=</span> <span class="s2">&quot;category/{slug}&quot;</span>
+<span class="n">CATEGORY_SAVE_AS</span> <span class="o">=</span> <span class="s2">&quot;category/{slug}/index.html&quot;</span>
+
+<span class="n">TAG_URL</span> <span class="o">=</span> <span class="s2">&quot;tag/{slug}&quot;</span>
+<span class="n">TAG_SAVE_AS</span> <span class="o">=</span> <span class="s2">&quot;tag/{slug}/index.html&quot;</span>
+
+<span class="n">MENUITEMS</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;About Me&#39;</span><span class="p">,</span> <span class="s1">&#39;about.html&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Colophon&#39;</span><span class="p">,</span> <span class="s1">&#39;colophon.html&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Topics&#39;</span><span class="p">,</span> <span class="s1">&#39;categories.html&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Blog&#39;</span><span class="p">,</span> <span class="s1">&#39;archives.html&#39;</span><span class="p">))</span>
+
+<span class="c1"># Uncomment following line if you want document-relative URLs when developing</span>
+<span class="n">RELATIVE_URLS</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<div class="section" id="makefile">
+<h2>Makefile</h2>
+<p>To build the website I do: <tt class="docutils literal">make html</tt></p>
+<div class="highlight"><pre><span></span><span class="nv">SHELL</span><span class="o">=</span>/bin/bash
+<span class="nv">PY</span><span class="o">?=</span>python
+<span class="nv">PELICAN</span><span class="o">?=</span>pelican
+<span class="nv">PELICANOPTS</span><span class="o">=</span>
+
+<span class="nv">BASEDIR</span><span class="o">=</span><span class="k">$(</span>CURDIR<span class="k">)</span>
+<span class="nv">INPUTDIR</span><span class="o">=</span><span class="k">$(</span>BASEDIR<span class="k">)</span>/content
+<span class="c"># OUTPUTDIR=/Users/kevin/github/walchko.github.io</span>
+<span class="nv">OUTPUTDIR</span><span class="o">=</span><span class="k">$(</span>BASEDIR<span class="k">)</span>/www
+<span class="nv">CONFFILE</span><span class="o">=</span><span class="k">$(</span>BASEDIR<span class="k">)</span>/pelicanconf.py
+
+<span class="nv">GITHUB_PAGES_BRANCH</span><span class="o">=</span>master
+
+<span class="nv">DEBUG</span> <span class="o">?=</span> <span class="m">0</span>
+<span class="cp">ifeq ($(DEBUG), 1)</span>
+        <span class="nv">PELICANOPTS</span> <span class="o">+=</span> -D
+<span class="cp">endif</span>
+
+<span class="nv">RELATIVE</span> <span class="o">?=</span> <span class="m">0</span>
+<span class="cp">ifeq ($(RELATIVE), 1)</span>
+        <span class="nv">PELICANOPTS</span> <span class="o">+=</span> --relative-urls
+<span class="cp">endif</span>
+
+<span class="nf">help</span><span class="o">:</span>
+        @echo <span class="s1">&#39;Makefile for a pelican Web site                                           &#39;</span>
+        @echo <span class="s1">&#39;                                                                          &#39;</span>
+        @echo <span class="s1">&#39;Usage:                                                                    &#39;</span>
+        @echo <span class="s1">&#39;   make html                           (re)generate the web site          &#39;</span>
+        @echo <span class="s1">&#39;   make clean                          remove the generated files         &#39;</span>
+        @echo <span class="s1">&#39;                                                                          &#39;</span>
+        @echo <span class="s1">&#39;Set the DEBUG variable to 1 to enable debugging, e.g. make DEBUG=1 html   &#39;</span>
+        @echo <span class="s1">&#39;Set the RELATIVE variable to 1 to enable relative urls                    &#39;</span>
+        @echo <span class="s1">&#39;                                                                          &#39;</span>
+
+<span class="nf">html</span><span class="o">:</span>
+        <span class="k">$(</span>PELICAN<span class="k">)</span> <span class="k">$(</span>INPUTDIR<span class="k">)</span> -o <span class="k">$(</span>OUTPUTDIR<span class="k">)</span> -s <span class="k">$(</span>CONFFILE<span class="k">)</span> <span class="k">$(</span>PELICANOPTS<span class="k">)</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+        <span class="o">[</span> -d <span class="k">$(</span>OUTPUTDIR<span class="k">)</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="k">$(</span>OUTPUTDIR<span class="k">)</span><span class="p">;</span> rm -fr *
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">html</span> <span class="n">help</span> <span class="n">clean</span>
+</pre></div>
+</div>
+<div class="section" id="publishing">
+<h2>Publishing</h2>
+<p>I use travis-ci publisher to build and publish to my github website. The yaml
+file below uses a github access token to push the pages to the gh-pages branch.</p>
+<blockquote>
+<dl class="docutils">
+<dt>code-include:: ../../.travis.yml</dt>
+<dd>lexer bash</dd>
+</dl>
+</blockquote>
+</div>
+<div class="section" id="pygments">
+<h2>Pygments</h2>
+<p>To setup the <tt class="docutils literal">css</tt> for code, I do:</p>
+<pre class="literal-block">
+kevin&#64;Logan pelican $ pygmentize -S default -f html &gt; pygments.css
+kevin&#64;Logan pelican $ mv pygments.css themes/kevin/static/css/
+kevin&#64;Logan pelican $ make html
+</pre>
+</div>
+
+
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href=".">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

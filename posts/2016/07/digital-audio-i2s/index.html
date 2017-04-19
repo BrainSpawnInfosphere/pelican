@@ -1,0 +1,139 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Digital Audio (I2S) | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Setting up an RPi3/Raspbian-Jessie with digital audio and avoiding the noise from the Pi's analog output"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/07/digital-audio-i2s">Digital Audio (I2S)</a></h2>
+<h5><i class="icon-feather"></i> Tue 26 July 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="figure align-center">
+<img alt="" src="https://cdn-learn.adafruit.com/assets/assets/000/032/618/medium800/adafruit_products_3006_kit_ORIG.jpg?1464029419" />
+</div>
+<p>Setting up I2S audio isn't too hard. I used a <a class="reference external" href="https://www.adafruit.com/products/3006">Adafruit i2s 3W amp (MAX98357A)</a>, to
+hook it up to my rpi3.</p>
+<p>Edit <tt class="docutils literal">/boot/config.txt</tt>:</p>
+<pre class="literal-block">
+# dtparam=audio=off
+dtparam=i2s=on
+dtoverlay=hifhiberry-dac
+</pre>
+<p>Create/edit <tt class="docutils literal">/etc/asound.conf</tt> to setup default audio:</p>
+<pre class="literal-block">
+pcm.!default  {
+  type hw card 0
+}
+ctl.!default {
+  type hw card 0
+}
+</pre>
+<p>Now you have to reboot so the system gets setup correctly (remember, these are boot parameter settings).</p>
+<p>Now connect the amp to the rpi:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Vin</td>
+<td>5V</td>
+</tr>
+<tr><td>Gnd</td>
+<td>Gnd</td>
+</tr>
+<tr><td>DIN</td>
+<td>21</td>
+</tr>
+<tr><td>BCLK</td>
+<td>18</td>
+</tr>
+<tr><td>LRCLK</td>
+<td>19</td>
+</tr>
+</tbody>
+</table>
+<div class="figure align-center">
+<img alt="" src="https://cdn-learn.adafruit.com/assets/assets/000/032/643/medium800/adafruit_products_3006_top_demo_ORIG.jpg?1464037283" />
+</div>
+<p>Now, lots of instructions on the internet say to disable i2c, but you don't have too. The bottom part of my
+<tt class="docutils literal">/boot/config.txt</tt> looks like this:</p>
+<pre class="literal-block">
+# Enable audio (loads snd_bcm2835)
+#dtparam=audio=off
+start_x=1
+gpu_mem=16
+dtparam=i2c_arm=on
+dtparam=i2s=on
+enable_uart=0
+dtoverlay=hifiberry-dac
+</pre>
+<p>As you can see, I leave i2c on. Note the <tt class="docutils literal">enable_uart=0</tt> is so I can use bluetooth. Apparently, the BT module is tied to
+the hardware serial port and the don't bother to tell people. You have to spend a lot of time to dig it up.</p>
+<div class="section" id="test">
+<h2>Test</h2>
+<ol class="arabic simple">
+<li>Random static: <tt class="docutils literal"><span class="pre">speaker-test</span> <span class="pre">-c2</span></tt></li>
+<li>Wave file: <tt class="docutils literal"><span class="pre">speaker-test</span> <span class="pre">-c2</span> <span class="pre">--test=wav</span> <span class="pre">-w</span> /usr/share/sounds/alsa/Front_Center.wav</tt></li>
+</ol>
+</div>
+<div class="section" id="references">
+<h2>References</h2>
+<ul class="simple">
+<li><a class="reference external" href="https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp?view=all">Adafruit tutorial 1</a></li>
+<li><a class="reference external" href="https://learn.adafruit.com/raspberry-pi-zero-npr-one-radio?view=all">Adafruit tutorial 2</a></li>
+<li><a class="reference external" href="https://www.raspberrypi.org/forums/viewtopic.php?t=97314">Raspberry Pi Forum discussion</a></li>
+<li><a class="reference external" href="http://learn.pimoroni.com/tutorial/phat/raspberry-pi-phat-dac-install">pimoroni</a></li>
+<li><a class="reference external" href="http://pinout.xyz/">Raspberry Pi pinout</a></li>
+</ul>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

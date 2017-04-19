@@ -1,0 +1,928 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Inertial Navigation | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Development of an inertial navigation system for a robot."><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/02/inertial-navigation">Inertial Navigation</a></h2>
+<h5><i class="icon-feather"></i> Tue 16 February 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>Inertial navigation systems (INS) uses a combination of accelerometers, gyros,
+other sensors, and math to determine a robot's position in 3D space. Today,
+everyone uses a strap down INS instead of the old gimbaled/mechanical systems
+which were very expensive and complex.</p>
+<p>This is primarily written as a cheatsheet for INS, not as a tutorial. Thus lots
+of equations are presented, but not everything is explained for a beginner.</p>
+<div class="section" id="strap-down-ins">
+<h2>Strap-down INS</h2>
+<p>For this we will use the Earth-Centered-Earth-Fixed (ECEF) reference frame to
+calculate the robot's equations of motion. First some terms and definitions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Symbol</th>
+<th class="head">Frame</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>n</td>
+<td>navigation (like LGV)</td>
+</tr>
+<tr><td>b</td>
+<td>body</td>
+</tr>
+<tr><td>c</td>
+<td>ECI</td>
+</tr>
+<tr><td>e</td>
+<td>ECEF</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Symbol</th>
+<th class="head">Definition</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><span class="math">\(\phi\)</span></td>
+<td>roll (motion around x-axis)</td>
+</tr>
+<tr><td><span class="math">\(\theta\)</span></td>
+<td>pitch (motion around y-axis)</td>
+</tr>
+<tr><td><span class="math">\(\psi\)</span></td>
+<td>yaw (motion around z-axis)</td>
+</tr>
+<tr><td>H</td>
+<td>height above median sea level</td>
+</tr>
+<tr><td><span class="math">\(\phi\)</span></td>
+<td>latitude (North/South, <span class="math">\(\pm\)</span> 90:math:<cite>degree</cite>)</td>
+</tr>
+<tr><td><span class="math">\(\lambda\)</span></td>
+<td>longitude (East/West, <span class="math">\(\pm\)</span> 180:math:<cite>degree</cite>)</td>
+</tr>
+<tr><td><span class="math">\(\omega_b\)</span></td>
+<td>body gyro rates <span class="math">\(\begin{bmatrix} \omega_x \omega_y \omega_z \end{bmatrix}^T\)</span></td>
+</tr>
+<tr><td><span class="math">\(\dot V_b\)</span></td>
+<td>body acceleration rates <span class="math">\(\begin{bmatrix} a_x a_y a_z \end{bmatrix}^T\)</span></td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="23%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Const</th>
+<th class="head">Value</th>
+<th class="head">Definition</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>R</td>
+<td>6,378,137.0 m</td>
+<td>Radius Earth</td>
+</tr>
+<tr><td><span class="math">\(\omega_{ie}\)</span></td>
+<td>7.292115E-15 rads/sec</td>
+<td>Rotation rate of the Earth wrt ECI (inertial frame)</td>
+</tr>
+<tr><td><span class="math">\(g_{WGS0}\)</span></td>
+<td>9.7803267715 m/sec^2</td>
+<td>Gravity at sea level on the equator</td>
+</tr>
+<tr><td><span class="math">\(g_{WGS1}\)</span></td>
+<td>0.019318538639</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>a</td>
+<td>6,378,137.0 m</td>
+<td>WGS84 semi-major axis</td>
+</tr>
+<tr><td>b</td>
+<td>6,356,752.314 245 m</td>
+<td>WGS84 semi-minor axis</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="decoder-key">
+<h2>Decoder Key</h2>
+<p>Superscripts typically are the frame a vector is currently in and subscripts describe the
+vector.</p>
+<p><span class="math">\(A_{descriptor}^{reference frame}\)</span></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Symbol</th>
+<th class="head">What it means</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><span class="math">\(\omega_{ie}\)</span></td>
+<td>Earth rotation measure wrt the initial frame.</td>
+</tr>
+<tr><td><span class="math">\(\omega_{eb}^b\)</span></td>
+<td>Body rates measured by the gyros wrt ECEF frame in the body frame. The rotation of the Earth is subtracted off the measured body rates to get this value.</td>
+</tr>
+<tr><td><span class="math">\(\omega_{ib}^b\)</span></td>
+<td>Body rates measured by the gyros wrt ECI frame in the body frame. Note, this is what you get right off the gyros.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="coordinate-systems">
+<h2>Coordinate Systems</h2>
+<dl class="docutils">
+<dt>Earth Center Inertial (ECI)</dt>
+<dd>The ECI frame's origin is located at the center of the Earth, with the x-axis
+pointing to the vernal equinox. For all intensive purposes, this frame is a
+true inertial (no moving) reference frame.</dd>
+<dt>Earth Centered Earth Fixed (ECEF)</dt>
+<dd>The ECEF coordinate system assumes that the origin is at the center of the
+planet, the x-axis intersects the Greenwich meridian and the equator, the
+z-axis is the mean spin axis of the planet, positive to the north, and the
+y-axis completes the right-hand system.</dd>
+<dt>Local Geodetic Vertical (LGV)</dt>
+<dd>The LGV frame creates a local frame with the z-axis parallel to the local
+gravity vector. Now, the x-axis and y-axis can be oriented several different
+ways. A common aerospace frame is North (x), East(y), Down(z) or NED. This
+orientation has the characteristic of altitude above the ground being
+negative. Another option is North (x), West (y), Up (z) or NWU which now has
+the local z-axis opposite gravity and up being positive. The reference below
+also show a link to the European Space Agency (ESA) and gives a more complex
+way to have a local frame with East (x), North (y), Up (z) or ENU.</dd>
+<dt>Latitude, Longitude, Altitude (LLA)</dt>
+<dd>Standard GPS coordinates (<span class="math">\(\phi\)</span>, <span class="math">\(\lambda\)</span>, a or latitude, longitude
+altitude (m)) based on WGS84 geodetic reference frame. This isn't so much a reference
+frame we use, but a way to determine where our robot starts its naviation in
+the ECEF frame.</dd>
+</dl>
+</div>
+<div class="section" id="transformations-between-frames">
+<h2>Transformations Between Frames</h2>
+<p>Conversion between EoM and LGV navigation frames <a class="footnote-reference" href="#id22" id="id1">[5]</a> <a class="footnote-reference" href="#id21" id="id2">[2]</a>:</p>
+<div class="math">
+\begin{align*}
+x_{NED} = C_e^{v-NED} x_ECEF \\
+C_e^{v-NED} =
+\begin{bmatrix}
+        -s \phi c \lambda &amp; -s \phi s \lambda &amp; c \phi \\
+        -s \lambda        &amp; c \lambda         &amp; 0 \\
+        -c \phi c \lambda &amp; -c \phi s \lambda &amp; -s \phi
+\end{bmatrix} \\
+\end{align*}
+</div>
+<div class="math">
+\begin{equation*}
+C_e^{v-NWU} =
+\begin{bmatrix}
+        -s \phi c \lambda &amp; -s \phi s \lambda &amp; c \phi \\
+        s \lambda         &amp; -c \lambda        &amp; 0 \\
+        c \phi c \lambda &amp; -c \phi s \lambda &amp; s \phi
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>where NED is North, East, Down and NWU is North, West, Up.</p>
+<p>Conversion between LLA and ECEF <a class="footnote-reference" href="#id23" id="id3">[3]</a> 1 and <a class="footnote-reference" href="#id21" id="id4">[2]</a> 1.18:</p>
+<div class="math">
+\begin{align*}
+x = (\frac{a}{d}+h) \cos \phi \cos \lambda \\
+y = (\frac{a}{d}+h) \cos \phi \sin \lambda \\
+z = (\frac{a(1-e^2)}{d}+h) \sin \phi \\
+d = \sqrt{1-e^2 \sin^2 \phi} \\
+e^2 = 1 - (\frac{b}{a})^2
+\end{align*}
+</div>
+<p>Again, this is mainly to deterine the starting location for an in door robot. If navigating
+for a long duration out side, it can be an external input into the Kalman Filter for the
+robot's current position.</p>
+</div>
+<div class="section" id="attitude">
+<h2>Attitude</h2>
+<p>Euler angles:</p>
+<ul class="simple">
+<li>3 angles that relate one coordinate frame to another</li>
+<li>Have a non-linear relationship to body axis angle rates</li>
+<li>They are non-orthogonal due how the rotations are handled</li>
+<li>Depending on order, have singularities at different orientations that have to be avoided</li>
+<li>Euler angles are human interpretable, but not typically used in equations of motion</li>
+</ul>
+<p>From <a class="footnote-reference" href="#id20" id="id5">[1]</a> eqns 3.44-3.48 (note, the subscripts in the book are wrong and have
+been corrected here: x-1, y-2, and z-3):</p>
+<div class="math">
+\begin{equation*}
+C_3 =
+\begin{bmatrix}
+        c \psi  &amp; s \psi &amp; 0 \\
+        -s \psi &amp; c \psi &amp; 0 \\
+        0       &amp; 0      &amp; 1
+\end{bmatrix}
+\end{equation*}
+</div>
+<div class="math">
+\begin{equation*}
+C_2 =
+\begin{bmatrix}
+        c \theta &amp; 0 &amp; -s \theta \\
+        0        &amp; 1 &amp; 0 \\
+        s \theta &amp; 0 &amp; c \theta
+\end{bmatrix}
+\end{equation*}
+</div>
+<div class="math">
+\begin{equation*}
+C_1 =
+\begin{bmatrix}
+        1 &amp; 0       &amp; 0 \\
+        0 &amp; s \phi  &amp; s \phi \\
+        0 &amp; -s \phi &amp; c \phi
+\end{bmatrix}
+\end{equation*}
+</div>
+<div class="math">
+\begin{align*}
+C_n^b = C_1 C_2 C_3 \\
+C_b^n = (C_n^b)^{-1} = C_n^{bT} = C_3^T C_2^T C_1^T \\
+\end{align*}
+</div>
+<p>Thus, the transform from body to nav is in the order of roll (x), pitch (y), and
+yaw (z). While the reverse, nav to body, is yaw, pitch, and then roll. The body
+to nav sequence is also referred to a 1-2-3 (x-y-z) by some authors.
+Note the inverse is equal to the transpose of a rotation matrix and a re-ordering
+of the individual matrices. The transformation is <a class="footnote-reference" href="#id20" id="id6">[1]</a> 3.49:</p>
+<div class="math">
+\begin{align*}
+C^b_n =
+\begin{bmatrix}
+               c \theta c \psi &amp; s \phi s \theta c \psi - c \phi s \psi &amp; s \phi s \psi + c \phi s \theta c \psi \\
+               c \theta s \psi &amp; c \phi c \psi + s \phi s \theta s \psi &amp; c \phi s \theta s \psi - s \phi s \psi \\
+               -s \theta       &amp; s \phi c \theta                        &amp; c \phi c \theta
+\end{bmatrix} \\
+\end{align*}
+</div>
+<p>Now, depending on what LGV frame you are using, you can calculate the transformation
+from body to ECEF:</p>
+<div class="math">
+\begin{equation*}
+C^e_b = C^e_n C^n_b
+\end{equation*}
+</div>
+<p>Ultimately we will use quaternions to avoid singularities.</p>
+</div>
+<div class="section" id="quaternions">
+<h2>Quaternions</h2>
+<p>Quaternions where described by Olinde Rodriques in 1840 and independently by William Rowan Hamilton in 1843 <a class="footnote-reference" href="#id27" id="id7">[8]</a>. Prior to his discovery,
+it was believed impossible that any algebra could violate the laws of commutativity
+for multiplication. His work introduced the idea of hyper-complex numbers. Here real
+numbers can be thought of as hyper-complex numbers with a rank of 1, ordinary complex
+numbers with a rank of 2, and quaternions with a rank of 4. Hamilton’s crucial rule that
+made this possible:</p>
+<div class="math">
+\begin{equation*}
+i^2=j^2=k^2=ijk=-1
+\end{equation*}
+</div>
+<p>Hamilton supposedly developed this rule while on his way to a party. When he realized
+what the solution was, he took out his pocket knife and carved the answer into a
+wooden bridge. This rule would forever change mathematics as was known at the time.
+Now mathematicians could look at algebra where commutativity did not work. This is
+where Gibbs and others developed algebra of vector spaces, and quickly eclipsed Hamilton’s
+work until recently.</p>
+<p>Quaternions, also known as Euler symmetric parameters, are more mathematically
+efficient ways to compute rotations of rigid and non-rigid body systems than traditional
+methods involving standard rotational matrices or Euler angles. Quaternions have the
+advantage of few trigonometric functions needed to compute attitude. Also, there exists a
+product rule for successive rotations that greatly simplifies the math, thus reducing processor
+computation time. Quaternions also hold the advantage of being able to interpolate
+between two quaternions (through a technique called spherical linear interpolation or
+SLERP) without the danger of singularities, maintaining a constant velocity, and minimum
+distance travelled between points</p>
+<p>The quaternion is composed of a scalar and a vector part. The scalar is a redundant element
+that prevents singularities from occurring since the four elements are all dependent
+upon each other. There are many different ways to represent a quaternion <a class="footnote-reference" href="#id20" id="id8">[1]</a> 3.53-3.54:</p>
+<div class="math">
+\begin{align*}
+q = \begin{bmatrix} a &amp; b &amp; c &amp; d \end{bmatrix}^T \\
+q = \begin{bmatrix}\cos(\mu/2) &amp; \hat e_x \sin(\mu/2) &amp; \hat e_y \sin(\mu/2) &amp; \hat e_z \sin(\mu/2) \end{bmatrix}^T \\
+q = \begin{bmatrix} q_r &amp; q_x &amp; q_y &amp; q_z \end{bmatrix}^T \\
+\end{align*}
+</div>
+<p>where <span class="math">\(\hat e\)</span> is the axis of rotation and <span class="math">\(\mu\)</span> is the angle of rotation
+about the axis. Also, a quaternion is a complex number with a real component (<span class="math">\(q_r\)</span>)
+and an imaginary component (<span class="math">\(q_{xyz}\)</span>).
+The order of the quaternion elements is not standardized. I have chosen to follow
+other complex numbers and do real then imaginary.</p>
+<div class="section" id="rigid-bodies-rotations">
+<h3>Rigid Bodies Rotations</h3>
+<p>A rigid body can be rotated about an arbitrary moving/fixed axis (<span class="math">\(\hat e\)</span>) in space by:</p>
+<div class="math">
+\begin{align*}
+q_{x,y,z} = \hat e \sin( \frac{\mu}{2} ) \\
+q_r = \cos(\frac{\mu}{2} )
+\end{align*}
+</div>
+<p>Quaternion multiplication (<span class="math">\(\otimes\)</span>) is <a class="footnote-reference" href="#id20" id="id9">[1]</a> 3.56:</p>
+<div class="math">
+\begin{align*}
+q \otimes p =
+\begin{bmatrix}
+        a &amp; -b &amp; -c &amp; -d \\
+        b &amp;  a &amp; -d &amp;  c \\
+        c &amp;  d &amp;  a &amp; -b \\
+        d &amp; -c &amp;  b &amp;  a \\
+\end{bmatrix} \cdot p = Q \cdot p \\
+\end{align*}
+</div>
+<p>Quaternion differential equation <a class="footnote-reference" href="#id20" id="id10">[1]</a> 3.56, 11.34-11.35:</p>
+<div class="math">
+\begin{align*}
+\dot q = \frac{1}{2} q \otimes w \\
+w = \begin{bmatrix} 0 &amp; \omega_b \end{bmatrix}^T \\
+\dot q = \frac{1}{2} W q \\
+W =
+\begin{bmatrix}
+        0   &amp; -w_x &amp; -w_y &amp; -w_z \\
+        w_x &amp; 0    &amp; w_z  &amp; -w_y \\
+        w_y &amp; -w_z &amp; 0    &amp; w_x \\
+        w_z &amp; w_y  &amp; -w_x &amp; 0
+\end{bmatrix}
+\end{align*}
+</div>
+<p>Now the transformation can also be done using a quaternion rather
+than Euler angles <a class="footnote-reference" href="#id20" id="id11">[1]</a> 3.63:</p>
+<div class="math">
+\begin{equation*}
+C_n^b =
+\begin{bmatrix}
+        (a^2+bb^2-c^2-d^2) &amp; 2(bc-ad)          &amp; 2(bd+ac) \\
+        2(bc+ad)           &amp; (a^2-b^2+c^2-d^2) &amp; 2(cd-ab) \\
+        2(bd-ac)           &amp; 2(cd+ab)          &amp; (a^2-b^2-c^2+d^2)
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>Converting between Euler and Quaternions is not always easy, but a
+solution that may not always work is <a class="footnote-reference" href="#id20" id="id12">[1]</a> 3.66:</p>
+<div class="math">
+\begin{align*}
+\phi = atan2(C_{32}, C_{33}) = atan2(2(cd+ab), (a^2-b^2-c^2+d^2)) \\
+\theta = asin(-C_{31}) = asin(-2(bd-ac)) \\
+\phi = atan2(C_{21}, C_{11}) = atan2(2(bc+ad), (a^2+bb^2-c^2-d^2))
+\end{align*}
+</div>
+<p>See Titterton for solutions when Euler angles are near singularities.</p>
+</div>
+</div>
+<div class="section" id="angular-rates">
+<h2>Angular Rates</h2>
+<p>Gyros are used to measure body rotation rates with respect to (wrt) the Inertial
+(ECI) frame. It is important to understand that Euler rotations are not orthoginal
+and you cannot use the transformation given previously to transform the rates. <a class="footnote-reference" href="#id24" id="id13">[4]</a> p 40.</p>
+<div class="math">
+\begin{align*}
+\omega_b = \begin{bmatrix} p &amp; q &amp; r \end{bmatrix}^T \\
+\dot \Theta = \begin{bmatrix} \dot \phi &amp; \dot \theta &amp; \dot \phi \end{bmatrix}^T \\
+\dot \Theta = L_b^I \omega_b \\
+L_b^I =
+\begin{bmatrix}
+        1 &amp; \sin \phi \tan \theta &amp; \cos \phi \tan \theta \\
+        0 &amp; \cos \phi &amp; -\sin \phi \\
+        0 &amp; \sin \phi \sec \theta &amp; \cos \phi \sec \theta
+\end{bmatrix}
+\end{align*}
+</div>
+<p>This is only useful if you are trying to integrate euler angles in an interal frame
+and don't want to use quaternions.</p>
+</div>
+<div class="section" id="titterton-ecef-eom">
+<h2>Titterton ECEF EoM</h2>
+<p>These equations follow the derivations in Titterton <a class="footnote-reference" href="#id20" id="id14">[1]</a>. Later equations from Chatfield are
+shown to be the same, but Titterton's derivation is a little easier to follow.</p>
+<div class="math">
+\begin{equation*}
+\newcommand{\dv}[2]{\left. \frac{ dv_{#1} }{dt} \right|_{#2}}
+\end{equation*}
+</div>
+<p>The equations of motion in an ECEF frame are <a class="footnote-reference" href="#id20" id="id15">[1]</a> 3.15, 3.19-3.23:</p>
+<div class="math">
+\begin{align*}
+\dv{e}{e} = \dv{e}{i} - \omega_{ie} \times v_e \\
+\dv{e}{i} = f - \omega_{ie} \times v_e + g_l \\
+\dv{e}{e} = f - 2 \omega_{ie} \times v_e + g_l \\
+\dot v_e^e = C_b^e f^b - 2 \omega_{ie}^e \times v_e^e + g_l
+\end{align*}
+</div>
+<p>where from before:</p>
+<div class="math">
+\begin{equation*}
+C^e_b = C^e_n C^n_b
+\end{equation*}
+</div>
+<p>The cross product can be replaced with a skew-symmetric matrix <a class="footnote-reference" href="#id25" id="id16">[6]</a> if desired</p>
+<div class="math">
+\begin{align*}
+a \times b = Ab \\
+A = [a]_{\times} =
+\begin{bmatrix}
+        0    &amp; -a_3 &amp; a_2 \\
+        a_3  &amp; 0    &amp; -a_1 \\
+        -a_2 &amp; a_1  &amp; 0
+\end{bmatrix}
+\end{align*}
+</div>
+<p>The local gravity model is given by <a class="footnote-reference" href="#id20" id="id17">[1]</a> 3.14:</p>
+<div class="math">
+\begin{equation*}
+g_l = g - \omega_{ie} \times [ \omega_{ie} \times r ]
+\end{equation*}
+</div>
+<p>Updating the transforms using gyro data <a class="footnote-reference" href="#id20" id="id18">[1]</a> 3.23:</p>
+<div class="math">
+\begin{equation*}
+\omega_{eb}^b = \omega_{ib}^b - C_e^b \omega_{ie}^e
+\end{equation*}
+</div>
+<p>Remember, the gyros measure body rates wrt the inertial frame (i.e., <span class="math">\(\omega_{ib}^b\)</span>) and we
+need to remove the Earth's rotational movement from the gyro measurements.
+Since we are using the ECEF frame, we need to move those measurements into that
+frame and also subtract off the rotation of the Earth.</p>
+</div>
+<div class="section" id="chatfield-ecef-eom">
+<h2>Chatfield ECEF EoM</h2>
+<p>The results above are the basically the same as Chatfield <a class="footnote-reference" href="#id21" id="id19">[2]</a> EoM for ECEF
+although he puts them into a state space equation:</p>
+<div class="math">
+\begin{align*}
+\frac{f}{m} = a = S \\
+v_i = v_s + \Omega_{ie} \times r_i \\
+\dot v_i = \dot v_s + \dot \Omega_{ie} \times r_i + \Omega_{ie} \times v_i \\
+\dot v_i = \dot v_s + \Omega_{ie} \times v_s + \Omega_{ie} \times [\Omega_{ie} \times r_i ] \\
+\Omega_{ie} = const \Rightarrow \dot \Omega_{ie} = 0 \\
+S^i + g^i = \dot v_s + \dot \omega_{ie} \times v_s + \Omega_{ie} \times [\Omega_{ie} \times r_i ] \\
+\dot v_s = S^i + g^i - \omega_{ie} \times v_s - \Omega_{ie} \times [\Omega_{ie} \times r_i ]
+\end{align*}
+</div>
+<p>Now all of these equations were derived in the inertial frame and they must be transformed into the
+ECEF frame.</p>
+<div class="math">
+\begin{align*}
+\dot v_e = \dot v_s - \Omega_{ie} \times v_s \\
+\dot v_s = S^i + g^i - \omega_{ie} \times v_s - \Omega_{ie} \times [\Omega_{ie} \times r_i ]
+\end{align*}
+</div>
+<p>Putting this into state space:</p>
+<div class="math">
+\begin{align*}
+\begin{bmatrix}
+    \dot V^e \\
+    \dot P^e
+\end{bmatrix}
+=
+\begin{bmatrix}
+    -2 \Omega^e_{ie} &amp; -\Omega^e_{ie}\Omega^e_{ie} \\
+    I &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+    V \\
+    P
+\end{bmatrix}
++
+\begin{bmatrix}
+    R^e_c &amp; R^e_b \\
+    0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+    g^c_{SHC} \\
+    S^b
+\end{bmatrix} \\
+\end{align*}
+</div>
+<div class="math">
+\begin{equation*}
+\Omega^e_{ie} = \begin{bmatrix}
+    0 &amp; -\omega_{ie} &amp; 0 \\
+    \omega_{ie} &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 0
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>Now including attitude using quaternions, the equations become:</p>
+<div class="math">
+\begin{align*}
+\begin{bmatrix}
+    \dot V^e \\
+    \dot P^e \\
+    \dot \Phi
+\end{bmatrix}
+=
+\begin{bmatrix}
+    -2 \Omega^e_{ie} &amp; -\Omega^e_{ie}\Omega^e_{ie} &amp; 0 \\
+    I &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; Q
+\end{bmatrix}
+\begin{bmatrix}
+    V \\
+    P \\
+    \Phi
+\end{bmatrix}
++
+\begin{bmatrix}
+    R^e_c &amp; R^e_b \\
+    0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+    g^c_{SHC} \\
+    S^b
+\end{bmatrix} \\
+\end{align*}
+</div>
+<div class="math">
+\begin{align*}
+\Omega^e_{ie} = \begin{bmatrix}
+    0 &amp; -\omega_{ie} &amp; 0 \\
+    \omega_{ie} &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 0
+\end{bmatrix} \\
+\end{align*}
+</div>
+<div class="math">
+\begin{align*}
+Q = \frac{1}{2} \begin{bmatrix}
+    0 &amp; \omega_z &amp; -\omega_y &amp; \omega_x \\
+    -\omega_z &amp; 0 &amp; \omega_z &amp; -\omega_y \\
+    \omega_y &amp; -\omega_x &amp; 0 &amp; \omega_z \\
+    -\omega_x &amp; -\omega_y &amp; -\omega_z &amp; 0
+ \end{bmatrix} \\
+\end{align*}
+</div>
+<div class="math">
+\begin{equation*}
+ \Phi = \begin{bmatrix} q_x &amp; q_y &amp; q_z &amp; q_w \end{bmatrix}^T
+\end{equation*}
+</div>
+<div class="math">
+\begin{align*}
+g=g_{WGS0} \frac{1+g{WGS1} \sin(\phi)^2}{ \sqrt{1-\epsilon^2 \sin(\phi)^2}} \\
+g^c_{SHC} = \begin{bmatrix}
+    \xi  g \\
+    -\eta g \\
+    g
+\end{bmatrix}
+\end{align*}
+</div>
+</div>
+<div class="section" id="sources-of-error">
+<h2>Sources of Error</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Source</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Bias</td>
+<td>Small offsets in accelerometers of (especially) the gyros lead to incorrect forces which produce more velocity and position changes than is really occurring.</td>
+</tr>
+<tr><td>Scale Factor</td>
+<td>This is a calibration issue where the IMU is reporting a proportional amount of the actual accelerations/rotation rates it is really subjected too</td>
+</tr>
+<tr><td>Temperature</td>
+<td>An IMU's accelerometers and gyroscopes are sensitive to temperature</td>
+</tr>
+<tr><td>Hysteresis</td>
+<td>Gyro drift rates and accelerometer biases tend to change each time a unit is switched on. One culprit of this is running white noise through a low pass filter produces a random walk, which contributes to the randomness of drift and bias values.</td>
+</tr>
+<tr><td>Vibration</td>
+<td>IMU's need to isolated from vibration sources and in some systems, the IMU mount needs to avoid certain resonance frequencies.</td>
+</tr>
+</tbody>
+</table>
+<p>Now, unfortunately, using the navigation EoM with inputs from gyros and
+accelerometers will most likely not give you good results for a variety of
+reasons (some listed above). Thus, some sort of correction needs to be incorporated
+and a Kalman filter is typically used to make the corrections.</p>
+</div>
+<div class="section" id="kalman-filter">
+<h2>Kalman Filter</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Variable</th>
+<th class="head">Definition</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><span class="math">\(x_k\)</span></td>
+<td>State at time k</td>
+</tr>
+<tr><td><span class="math">\(z_k\)</span></td>
+<td>Measurement at time k</td>
+</tr>
+<tr><td><span class="math">\(\Phi = \frac{\partial}{\partial x} F(x,u,t)\)</span></td>
+<td>Jacobian of the state transition matrix</td>
+</tr>
+<tr><td><span class="math">\(H = \frac{\partial}{\partial x} C(x,u,t)\)</span></td>
+<td>Jacobian of the observation matrix</td>
+</tr>
+<tr><td><span class="math">\(Q\)</span></td>
+<td>Covariance of white process noise</td>
+</tr>
+<tr><td><span class="math">\(R\)</span></td>
+<td>Covariance of the measurement noise</td>
+</tr>
+<tr><td><span class="math">\(P_k\)</span></td>
+<td>Error covariance at time k</td>
+</tr>
+<tr><td><span class="math">\(D\)</span></td>
+<td>Direct transmission of inputs to outputs</td>
+</tr>
+<tr><td><span class="math">\(u\)</span></td>
+<td>Control inputs</td>
+</tr>
+<tr><td><span class="math">\(v_k\)</span></td>
+<td>Measurement noise</td>
+</tr>
+<tr><td><span class="math">\(w_k\)</span></td>
+<td>Process noise</td>
+</tr>
+</tbody>
+</table>
+<p>Assume our system is of the following form:</p>
+<div class="math">
+\begin{align*}
+\dot x = Fx+Bu+Gw \\
+z=Cx+Du+v
+\end{align*}
+</div>
+<p>This process can be modeled (assuming no control inputs for now) as:</p>
+<div class="math">
+\begin{align*}
+x_{k+1} = \Phi x_k + w_k \\
+z_k = H x_k + v_k  \\
+Q = E[w_k w^T_k]  \\
+R = E[v_k v^T_k]  \\
+P_k = E[e_k e_k^T = E[(x_k - \hat x_k)(x_k - \hat x_k)^T]  \\
+\end{align*}
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Description</th>
+<th class="head">Equation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Kalman Gain</td>
+<td><span class="math">\(K_k = P_k' H^T (H P_k' H^T + R)^(-1)\)</span></td>
+</tr>
+<tr><td>Update Estimate</td>
+<td><span class="math">\(\hat x_k = \hat x_k' + K_k (z_k - H \hat x_k')\)</span></td>
+</tr>
+<tr><td>Update Covariance</td>
+<td><span class="math">\(P_k = (I - K_k H) P_k'\)</span></td>
+</tr>
+<tr><td>Project into k+1</td>
+<td><span class="math">\(\hat x_{k+1}' = \Phi \hat x_k \\ P_{k+1} = \Phi P_k \Phi^T + Q\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="augmentation">
+<h3>Augmentation</h3>
+<p>The Kalman filter can be use to estimate unknown parameters. This can be done by augmenting, or modifying, both the state vector and the state transition matrix.</p>
+<div class="math">
+\begin{equation*}
+\begin{bmatrix}
+    \Phi_{system} &amp; \Phi_{coupling} \\
+    0 &amp; \Phi_{augment}
+\end{bmatrix}
+\end{equation*}
+</div>
+</div>
+</div>
+<div class="section" id="aided-ins">
+<h2>Aided INS</h2>
+<p>Kalman filters are typically employed in INS with external measurement sensors
+(i.e., GPS, rangers, encoders, etc). In this form, the filter tracks navigation errors and
+attempts to correct them.</p>
+<div class="section" id="position-error-model">
+<h3>Position Error Model</h3>
+<div class="math">
+\begin{align*}
+\Delta \dot V^e = -2 \Omega_{ie}^e \Delta V^e - \Omega \Omega \Delta P^e + S^e \Delta \phi^e \\
+\Delta \dot P^e = \Delta V^e \\
+\Delta \dot \Phi = \omega_b^e \times \Delta \Phi - C_b^e \Delta w^b \\
+\Delta \dot S^b = \Delta S_N^b \\
+\Delta \dot w^b = \Delta w_N^b
+\end{align*}
+</div>
+<p>Where the terms with subscripts N are white noise to mimic a random walk. Also,
+the <span class="math">\(\Delta S_N^b\)</span> and <span class="math">\(\Delta w_N^b\)</span> represent the accelerometer and
+gyro biases which, in this augmented Kalman filter, are being estimated.</p>
+<div class="math">
+\begin{align*}
+P^e = ? \\
+V^e = ? \\
+\omega^e = ?
+\end{align*}
+</div>
+</div>
+<div class="section" id="attitude-error-model">
+<h3>Attitude Error Model</h3>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References</h2>
+<table class="docutils footnote" frame="void" id="id20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id5">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id8">3</a>, <a class="fn-backref" href="#id9">4</a>, <a class="fn-backref" href="#id10">5</a>, <a class="fn-backref" href="#id11">6</a>, <a class="fn-backref" href="#id12">7</a>, <a class="fn-backref" href="#id14">8</a>, <a class="fn-backref" href="#id15">9</a>, <a class="fn-backref" href="#id17">10</a>, <a class="fn-backref" href="#id18">11</a>)</em> Titerton, 'Strapdown Inertial Navigation Technology, 2nd Ed,' Progress in Astronautics and Aeronautics, Vol 207, 2004.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id21" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>, <a class="fn-backref" href="#id19">3</a>)</em> Chatfield, 'Fundamentals of High Accuracy Inertial Navigation,' AIAA, Vol 174, 1997.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id22" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[5]</a></td><td><a class="reference external" href="http://www.mathworks.com/help/aeroblks/directioncosinematrixeceftoned.html">http://www.mathworks.com/help/aeroblks/directioncosinematrixeceftoned.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id23" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Drake, 'Converting GPS Coordinates (φλh) to Navigation Coordinates (ENU),' <a class="reference external" href="http://digext6.defence.gov.au/dspace/bitstream/1947/3538/1/DSTO-TN-0432.pdf">http://digext6.defence.gov.au/dspace/bitstream/1947/3538/1/DSTO-TN-0432.pdf</a>, April 2002.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id24" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[4]</a></td><td>Stengel, 'Aircraft Equations of Motion 2,' <a class="reference external" href="http://www.princeton.edu/~stengel/MAE331Lecture9.pdf">http://www.princeton.edu/~stengel/MAE331Lecture9.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id25" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id16">[6]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Skew-symmetric_matrix#Cross_product">https://en.wikipedia.org/wiki/Skew-symmetric_matrix#Cross_product</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id26" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[7]</td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Euler_angles">https://en.wikipedia.org/wiki/Euler_angles</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id27" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[8]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/History_of_quaternions">https://en.wikipedia.org/wiki/History_of_quaternions</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="resources">
+<h2>Resources</h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python">https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python</a></li>
+<li><a class="reference external" href="http://web.mit.edu/kirtley/kirtley/binlustuff/literature/control/Kalman%20filter.pdf">MIT Kalman filter derivation</a></li>
+<li><a class="reference external" href="http://home.wlu.edu/~levys/kalman_tutorial/">Interactive Kalman filter demo and explaination</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman filter on Wikipedia</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Extended_Kalman_filter">Extended Kalman filter on Wikipedia</a></li>
+<li><a class="reference external" href="https://homes.cs.washington.edu/~todorov/courses/cseP590/readings/tutorialEKF.pdf">Extended Kalman filter tutorial from University of Buffalo</a></li>
+<li><a class="reference external" href="http://walchko.github.io/pages/Publications/walchko-MS-EE.pdf">My Masters Thesis</a></li>
+<li><a class="reference external" href="http://www.mathworks.com/help/aeroblks/directioncosinematrixeceftoned.html">Mathworks ECEF to NED</a></li>
+<li><a class="reference external" href="http://www.navipedia.net/index.php/Transformations_between_ECEF_and_ENU_coordinates">ESA ECEF to ENU</a></li>
+</ul>
+</div>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "left",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

@@ -1,0 +1,170 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Serial Communication | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Simple serial info"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/08/serial-communication">Serial Communication</a></h2>
+<h5><i class="icon-feather"></i> Mon 22 August 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>If you need to quickly use a serial port, use <tt class="docutils literal">pyserial</tt>:</p>
+<pre class="literal-block">
+python -m serial.tools.miniterm -e /dev/tty.usbserial-A5004Flb 9600
+</pre>
+<p>This opens up a simple little terminal. The <tt class="docutils literal"><span class="pre">-e</span></tt> echos what you type. The
+above serial port is on macOS, but RPi typically has <tt class="docutils literal">/dev/ttyACM0</tt> or
+<tt class="docutils literal">/dev/ttyS0</tt> for the serial port.</p>
+<div class="section" id="python">
+<h2>Python</h2>
+<p>A simple python script is:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">serial</span>
+
+<span class="c1"># s = serial.Serial(&#39;/dev/ttyS0&#39;, 19200, timeout=1)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">()</span>
+<span class="n">s</span><span class="o">.</span><span class="n">baudrate</span> <span class="o">=</span> <span class="mi">19200</span>
+<span class="n">s</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="s1">&#39;/dev/serial0&#39;</span>
+<span class="n">s</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+<ul class="simple">
+<li><a class="reference external" href="http://pyserial.readthedocs.io">pyserial docs</a></li>
+</ul>
+<div class="section" id="setup-old">
+<h3>Setup (old)</h3>
+<p>Depending, if you don't have permission to open the serial port and are forced
+to use <tt class="docutils literal">sudo</tt>, add your user to the <tt class="docutils literal">tty</tt> group:</p>
+<pre class="literal-block">
+sudo usermod -a -G tty pi
+</pre>
+</div>
+<div class="section" id="rpi3">
+<h3>RPi3</h3>
+<p>Basically the serial situation is all fucked up and no one really knows what is
+going on because of the terrible documentation. The setup is:</p>
+<pre class="literal-block">
+pi&#64;zoidberg ~ $ ls -al /dev/serial*
+lrwxrwxrwx 1 root root 5 Feb 13 20:57 /dev/serial0 -&gt; ttyS0
+lrwxrwxrwx 1 root root 7 Feb 13 20:57 /dev/serial1 -&gt; ttyAMA0
+</pre>
+<p>where:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="18%" />
+<col width="10%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Port</th>
+<th class="head">Alias</th>
+<th class="head">uart</th>
+<th class="head">Use</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">/dev/ttyAMA0</tt></td>
+<td><tt class="docutils literal">/dev/serial1</tt></td>
+<td><tt class="docutils literal">uart0</tt></td>
+<td>Bluetooth, independent of core clock rate</td>
+</tr>
+<tr><td><tt class="docutils literal">/dev/ttyS0</tt></td>
+<td><tt class="docutils literal">/dev/serial0</tt></td>
+<td><tt class="docutils literal">uart1</tt></td>
+<td>GPIO, baud rate is dependent on core clock rate</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="fix-things">
+<h2>Fix Things</h2>
+<p>** this doesn't completely work **</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Edit <tt class="docutils literal">/boot/config.txt</tt> and add:</dt>
+<dd><ul class="first last simple">
+<li><tt class="docutils literal">enable_uart=1</tt></li>
+<li><tt class="docutils literal"><span class="pre">dtoverlay=pi3-disable-bt</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">dtoverlay=pi3-miniuart-bt-overlay</span></tt></li>
+<li><tt class="docutils literal">force_turbo=1</tt></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Edit <tt class="docutils literal">/boot/cmdline.txt</tt> and remove console commands tied to serial port:</p>
+<pre class="literal-block">
+dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait
+</pre>
+</li>
+<li><dl class="first docutils">
+<dt>Turn off any serial services::</dt>
+<dd><p class="first last">$ sudo systemctl stop <a class="reference external" href="mailto:serial-getty&#64;ttyS0.service">serial-getty&#64;ttyS0.service</a>
+$ sudo systemctl disable <a class="reference external" href="mailto:serial-getty&#64;ttyS0.service">serial-getty&#64;ttyS0.service</a></p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Now I have:</p>
+<pre class="literal-block">
+pi&#64;zoidberg bin $ ls -al /dev/serial*
+lrwxrwxrwx 1 root root 7 Feb 17 16:47 /dev/serial0 -&gt; ttyAMA0
+lrwxrwxrwx 1 root root 5 Feb 17 16:47 /dev/serial1 -&gt; ttyS0
+</pre>
+<p>See how the serial terminals have changed.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://frillip.com/raspberry-pi-3-uart-baud-rate-workaround/">RASPBERRY PI 3 UART BAUD RATE WORKAROUND</a></li>
+<li><a class="reference external" href="http://raspberrypi.stackexchange.com/questions/45570/how-do-i-make-serial-work-on-the-raspberry-pi3">Stack Exchange</a></li>
+<li><a class="reference external" href="http://spellfoundry.com/2016/05/29/configuring-gpio-serial-port-raspbian-jessie-including-pi-3/">spellfoundry.com</a></li>
+</ul>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

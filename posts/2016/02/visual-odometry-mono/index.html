@@ -1,0 +1,183 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Visual Odometry - Mono | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="How to track distance travel via a camera - still work in progress"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2016/02/visual-odometry-mono">Visual Odometry - Mono</a></h2>
+<h5><i class="icon-feather"></i> Tue 16 February 2016
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>Visual odometry is using a camera to figure out how far a robot has gone. It is
+most accurate when doing stereo vision because the system can determine how far
+points have travelled. Monocular vision can be just as useful, except there is
+a scaling issue that needs to be determined (from another sensor) in order to
+determine the distance travelled.</p>
+<div class="section" id="steps">
+<h2>Steps</h2>
+<ol class="arabic simple">
+<li>Grab image</li>
+<li>Rectify image</li>
+<li>Determine movement of tracked points (optical flow and camera geometry)</li>
+</ol>
+</div>
+<div class="section" id="useful-eqns">
+<h2>Useful Eqns</h2>
+<p><span class="math">\(s \begin{pmatrix} u &amp; v &amp; 1 \end{pmatrix}^T = C E \begin{pmatrix} x &amp; y &amp; z &amp; 1 \end{pmatrix}^T\)</span></p>
+<p>where <span class="math">\((u,v)\)</span> are a point's location in the image plane and <span class="math">\((x,y,z)\)</span>
+are the corresponding point's location in the real-world.</p>
+</div>
+<div class="section" id="terms">
+<h2>Terms</h2>
+<dl class="docutils">
+<dt>Essential Matrix (E)</dt>
+<dd>Contains the rotation and translation (R|t) of a second camera relative to
+the first camera in stereo vision.</dd>
+<dt>Fundamental Matrix (F)</dt>
+<dd>Same as E, but with intrinsics. If the images are already rectified, then
+F = E.</dd>
+<dt>Camera Matrix (C)</dt>
+<dd>The camera matrix contains both the focal lengths (x,y) and the center point
+(x,y) of the image for the camera. You can use the the camera matrix to
+move between 2D (in the image) and 3D (in the real world) points.</dd>
+</dl>
+</div>
+<div class="section" id="mapping-camera-coordinates-to-ground-plane">
+<h2>Mapping Camera Coordinates to Ground Plane</h2>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/vo_ref.png" style="width: 300px;" />
+<p class="caption">Mapping coordinates in the camera frame to the ground plane</p>
+</div>
+<p>In order to recover the speed, we need to understand how pixels in the image are moving in
+the real world.</p>
+<div class="math">
+\begin{align*}
+\tan(\beta)= \frac{H}{D} \\
+\tan(\beta)=(2 \nu - V) \tan( \frac{VFOV}{2}) \\
+y = \frac{H}{\tan(\alpha + \beta)} \\
+z = \frac{H \cos(\beta)}{\sin(\alpha + \beta)}
+\end{align*}
+</div>
+<p>where VFOV is the vertical field of view, <span class="math">\(\nu\)</span>.</p>
+</div>
+<div class="section" id="optical-flow">
+<h2>Optical Flow</h2>
+<div class="figure align-center">
+<img alt="" src="../../../../blog/robots/pics/vo_example.png" style="width: 300px;" />
+</div>
+</div>
+<div class="section" id="references">
+<h2>References</h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://docs.opencv.org/3.1.0/">OpenCV 3.1 Docs</a></li>
+<li><a class="reference external" href="https://avisingh599.github.io/vision/monocular-vo/">Avi Singh</a></li>
+<li><ol class="first upperalpha" start="10">
+<li>Campbell, R. Sukthankar, I. Nourbakhsh, A. Pahwa, A Robust Visual Odometry and Precipice Detection System Using Consumer-grade Monocular Vision, Robotics and Automation, 2005. ICRA 2005. Proceedings of the 2005 IEEE International Conference, p. 3421 - 3427, 18-22 April 2005.</li>
+</ol>
+</li>
+</ol>
+</div>
+<script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "left",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

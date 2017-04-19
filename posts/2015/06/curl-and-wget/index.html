@@ -1,0 +1,126 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Curl and Wget | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Downloading things from the internet via the command line"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2015/06/curl-and-wget">Curl and Wget</a></h2>
+<h5><i class="icon-feather"></i> Mon 01 June 2015
+<i class="icon-bookmarks"></i>
+</h5>
+
+<div class="section" id="wget">
+<h2>wget</h2>
+<pre class="literal-block">
+wget &quot;https://somewhere/file&quot;
+</pre>
+</div>
+<div class="section" id="curl">
+<h2>curl</h2>
+<p>This cheatsheet came from <a class="reference external" href="http://blog.mixu.net/2013/01/29/curl-cheatsheet/">mixu</a>.</p>
+<p>Simple GET request</p>
+<pre class="literal-block">
+curl -k &quot;https://localhost/foo?bar=baz&amp;amp;abc=def&quot;
+</pre>
+<p>JSON POST or PUT request</p>
+<pre class="literal-block">
+curl -k -H &quot;Content-Type: application/json&quot; -X POST -d '{&quot;accountName&quot;:&quot;test&quot;,&quot;value&quot;:&quot;hello&quot;}' https://localhost/foo
+</pre>
+<p>or</p>
+<pre class="literal-block">
+curl -X &quot;PUT&quot;
+</pre>
+<p>POST a file</p>
+<pre class="literal-block">
+curl ... --data-binary &#64;filename
+</pre>
+<p>Fake a /etc/hosts entry and a Host: header with curl</p>
+<pre class="literal-block">
+curl -vvv --resolve 'book.mixu.net:80:123.145.167.189' http://book.mixu.net/
+</pre>
+<p>Make a request with basic auth enabled</p>
+<pre class="literal-block">
+curl -vvv -u name&#64;foo.com:password http://www.example.com
+</pre>
+<p>or</p>
+<pre class="literal-block">
+curl --user name:password http://www.example.com
+</pre>
+<p>Set the Referer header</p>
+<pre class="literal-block">
+curl -e http://curl.haxx.se daniel.haxx.se
+</pre>
+<p>Set the User Agent header</p>
+<pre class="literal-block">
+curl -A &quot;Mozilla/4.73&quot;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+curl --user-agent &quot;Mozilla&quot;.
+</pre>
+<p>Set Cookies</p>
+<pre class="literal-block">
+curl -b &quot;name=Daniel&quot;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+curl --cookie &quot;name=Daniel&quot;
+</pre>
+<p>Time a request (connect time + time to first byte + total tile)</p>
+<pre class="literal-block">
+curl -o /dev/null -w &quot;Connect: %{time_connect} TTFB: %{time_starttransfer} Total time: %{time_total} \n&quot; http://google.com
+</pre>
+<p>Downloading files from Github</p>
+<pre class="literal-block">
+curl -O  https://raw.github.com/username/reponame/master/filename
+</pre>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>

@@ -1,0 +1,161 @@
+<!-- This is for the actual single article -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Python | Planet Express</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="description" content="Python code snippets and useful libraries"><meta name="author" content="walchko">  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Cache-Control" content="max-age=604800, must-revalidate" />
+  <link href="../../../../theme/css/screen.css" rel="stylesheet" type="text/css" />
+  <link href="../../../../theme/css/pygments.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="../../../../favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../../../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div id="outer-wrapper">
+<div id="header-wrapper">
+  <div class="logo"><a href="../../../..">Planet Express</a></div>
+  <div class="small">Our crew is replaceable. Your package isn't.</div>
+  <div class="nav">
+  <li><a href="../../../../about.html">About Me</a></li>
+  <li><a href="../../../../colophon.html">Colophon</a></li>
+  <li><a href="../../../../categories.html">Topics</a></li>
+  <li><a href="../../../../archives.html">Blog</a></li>
+  </div>
+  <div class="nav social">
+<ul>
+    <li><a href="http://github.com/walchko"><i class="fa fa-github-alt fa-2x"></i></a></li>
+    <li><a href="http://stackoverflow.com/users/5374768/kevin"><i class="fa fa-stack-overflow fa-2x"></i></a></li>
+    <li><a href="http://raspberrypi.stackexchange.com/users/1677/kevin"><i class="fa fa-stack-exchange fa-2x"></i></a></li>
+</ul>  </div>
+</div>    <div id="main">
+
+<!--  -->
+
+<h2><a href="../../../../posts/2017/02/python">Python</a></h2>
+<h5><i class="icon-feather"></i> Fri 17 February 2017
+<i class="icon-bookmarks"></i>
+</h5>
+
+<p>A useful reference is <a class="reference external" href="https://pymotw.com/2/contents.html">Python Module of the Week</a></p>
+<div class="section" id="the-future-is-now">
+<h2>The Future is Now</h2>
+<p>The future library backports some potentially useful python3 code to python2:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span> <span class="c1"># changes print to a function instead of a statement</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>       <span class="c1"># all division is floating point</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;hello!&#39;</span><span class="p">)</span>  <span class="c1"># now a function</span>
+
+<span class="mi">1</span><span class="o">/</span><span class="mi">3</span>   <span class="c1"># result is 0.333, float division ... similar to other languages</span>
+<span class="mi">10</span><span class="o">//</span><span class="mi">3</span> <span class="c1"># result is 3, this is integer division</span>
+</pre></div>
+<p>Other capabilities can be found in the docs.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://docs.python.org/2/library/__future__.html">future docs</a></li>
+</ul>
+</div>
+<div class="section" id="temporary-files-and-folders">
+<h2>Temporary Files and Folders</h2>
+<p>Create a simple temp file:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="k">print</span>
+<span class="k">print</span> <span class="s1">&#39;TemporaryFile:&#39;</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryFile</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s1">&#39;temp:&#39;</span><span class="p">,</span> <span class="n">temp</span>
+        <span class="k">print</span> <span class="s1">&#39;temp.name:&#39;</span><span class="p">,</span> <span class="n">temp</span><span class="o">.</span><span class="n">name</span>
+<span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Automatically cleans up the file</span>
+        <span class="n">temp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+<p>Create a temp folder:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="n">directory_name</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">directory_name</span>
+
+<span class="c1"># Clean up the directory yourself</span>
+<span class="n">os</span><span class="o">.</span><span class="n">removedirs</span><span class="p">(</span><span class="n">directory_name</span><span class="p">)</span>
+</pre></div>
+<ul class="simple">
+<li><a class="reference external" href="https://pymotw.com/2/tempfile/">tempfile examples</a></li>
+</ul>
+</div>
+<div class="section" id="serial-comm">
+<h2>Serial Comm</h2>
+<p>A simple python script is:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">serial</span>
+
+<span class="c1"># s = serial.Serial(&#39;/dev/ttyS0&#39;, 19200, timeout=1)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">()</span>
+<span class="n">s</span><span class="o">.</span><span class="n">baudrate</span> <span class="o">=</span> <span class="mi">19200</span>
+<span class="n">s</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="s1">&#39;/dev/serial0&#39;</span>
+<span class="n">s</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+<ul class="simple">
+<li><a class="reference external" href="http://pyserial.readthedocs.io">pyserial docs</a></li>
+</ul>
+</div>
+<div class="section" id="platform">
+<h2>Platform</h2>
+<p>Get platform info:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">platform</span>
+
+<span class="k">print</span> <span class="s1">&#39;Platform     :&#39;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span>
+<span class="k">print</span> <span class="s1">&#39;System       :&#39;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+<span class="k">print</span> <span class="s1">&#39;Version      :&#39;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">()</span>
+<span class="k">print</span> <span class="s1">&#39;Version tuple:&#39;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version_tuple</span><span class="p">()</span>
+<span class="k">print</span> <span class="s1">&#39;Compiler     :&#39;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_compiler</span><span class="p">()</span>
+<span class="k">print</span> <span class="s1">&#39;Build        :&#39;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_build</span><span class="p">()</span>
+</pre></div>
+<p>Will output something like this for linux:</p>
+<pre class="literal-block">
+Platform     : Linux-4.4.48-v7+-armv7l-with-debian-8.0
+System       : Linux
+Version      : 2.7.9
+Version tuple: ('2', '7', '9')
+Compiler     : GCC 4.9.2
+Build        : ('default', 'Sep 17 2016 20:26:04')
+</pre>
+</div>
+<div class="section" id="netaddr">
+<h2>Netaddr</h2>
+<p><cite>Netaddr</cite> has a lot of useful functions for working with ip addresses.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">netaddr</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">dir</span><span class="p">(</span><span class="n">netaddr</span><span class="p">)</span>
+<span class="p">[</span><span class="s1">&#39;AddrConversionError&#39;</span><span class="p">,</span> <span class="s1">&#39;AddrFormatError&#39;</span><span class="p">,</span> <span class="s1">&#39;EUI&#39;</span><span class="p">,</span> <span class="s1">&#39;IAB&#39;</span><span class="p">,</span> <span class="s1">&#39;INET_PTON&#39;</span><span class="p">,</span> <span class="s1">&#39;IPAddress&#39;</span><span class="p">,</span> <span class="s1">&#39;IPGlob&#39;</span><span class="p">,</span> <span class="s1">&#39;IPNetwork&#39;</span><span class="p">,</span> <span class="s1">&#39;IPRange&#39;</span><span class="p">,</span> <span class="s1">&#39;IPSet&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;NOHOST&#39;</span><span class="p">,</span> <span class="s1">&#39;NotRegisteredError&#39;</span><span class="p">,</span> <span class="s1">&#39;OUI&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;STATUS&#39;</span><span class="p">,</span> <span class="s1">&#39;SubnetSplitter&#39;</span><span class="p">,</span> <span class="s1">&#39;VERSION&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;ZEROFILL&#39;</span><span class="p">,</span> <span class="s1">&#39;__builtins__&#39;</span><span class="p">,</span> <span class="s1">&#39;__doc__&#39;</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">,</span> <span class="s1">&#39;__package__&#39;</span><span class="p">,</span> <span class="s1">&#39;__path__&#39;</span><span class="p">,</span> <span class="s1">&#39;__version__&#39;</span><span class="p">,</span> <span class="s1">&#39;_sys&#39;</span><span class="p">,</span> <span class="s1">&#39;all_matching_cidrs&#39;</span><span class="p">,</span> <span class="s1">&#39;base85_to_ipv6&#39;</span><span class="p">,</span> <span class="s1">&#39;cidr_abbrev_to_verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;cidr_exclude&#39;</span><span class="p">,</span> <span class="s1">&#39;cidr_merge&#39;</span><span class="p">,</span> <span class="s1">&#39;cidr_to_glob&#39;</span><span class="p">,</span> <span class="s1">&#39;compat&#39;</span><span class="p">,</span> <span class="s1">&#39;contrib&#39;</span><span class="p">,</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="s1">&#39;eui&#39;</span><span class="p">,</span> <span class="s1">&#39;eui64_bare&#39;</span><span class="p">,</span> <span class="s1">&#39;eui64_base&#39;</span><span class="p">,</span> <span class="s1">&#39;eui64_cisco&#39;</span><span class="p">,</span> <span class="s1">&#39;eui64_unix&#39;</span><span class="p">,</span> <span class="s1">&#39;eui64_unix_expanded&#39;</span><span class="p">,</span> <span class="s1">&#39;glob_to_cidrs&#39;</span><span class="p">,</span> <span class="s1">&#39;glob_to_iprange&#39;</span><span class="p">,</span> <span class="s1">&#39;glob_to_iptuple&#39;</span><span class="p">,</span> <span class="s1">&#39;ip&#39;</span><span class="p">,</span> <span class="s1">&#39;iprange_to_cidrs&#39;</span><span class="p">,</span> <span class="s1">&#39;iprange_to_globs&#39;</span><span class="p">,</span> <span class="s1">&#39;ipv6_compact&#39;</span><span class="p">,</span> <span class="s1">&#39;ipv6_full&#39;</span><span class="p">,</span> <span class="s1">&#39;ipv6_to_base85&#39;</span><span class="p">,</span> <span class="s1">&#39;ipv6_verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;iter_iprange&#39;</span><span class="p">,</span> <span class="s1">&#39;iter_nmap_range&#39;</span><span class="p">,</span> <span class="s1">&#39;iter_unique_ips&#39;</span><span class="p">,</span> <span class="s1">&#39;largest_matching_cidr&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_bare&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_cisco&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_eui48&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_pgsql&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_unix&#39;</span><span class="p">,</span> <span class="s1">&#39;mac_unix_expanded&#39;</span><span class="p">,</span> <span class="s1">&#39;smallest_matching_cidr&#39;</span><span class="p">,</span> <span class="s1">&#39;spanning_cidr&#39;</span><span class="p">,</span> <span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_eui64&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_glob&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_ipv4&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_ipv6&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_mac&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_nmap_range&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">netaddr</span><span class="o">.</span><span class="n">valid_ipv4</span><span class="p">(</span><span class="s1">&#39;192.168.1.1&#39;</span><span class="p">)</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">netaddr</span><span class="o">.</span><span class="n">valid_ipv4</span><span class="p">(</span><span class="s1">&#39;192.168.1.300&#39;</span><span class="p">)</span>
+<span class="bp">False</span>
+</pre></div>
+</div>
+<div class="section" id="networking">
+<h2>Networking</h2>
+<p>A really good resource for network programming with python is <a class="reference external" href="{filename}/blog/programming/PythonNetBinder.pdf">here</a></p>
+</div>
+
+
+<p align="center"><a href="#">on the top</a></p>
+    </div>
+</div>
+<div id="footer-wrapper">
+<ul class="footer">
+</ul><ul class="footer">
+    <li class="footer">&copy;&nbsp;2016&nbsp;Kevin J. Walchko&nbsp;::</li>
+    <li class="footer"><a href="../../../..">Planet Express </a>&nbsp;::</li>
+    <li class="footer"><a href="https://github.com/getpelican">pelican</a></li>
+    <!-- <li class="footer"><a href="http://creativecommons.org/licenses/by-nc/3.0/deed">Content CC BY-NC</a>&nbsp;::</li> -->
+    <!-- <li class="footer"><a href="http://fontawesome.io">Font Awesome <i class="fa fa-flag"></i></a></li> -->
+    <!-- <li class="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></li> -->
+</ul>
+<span><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a></span>
+</div></body>
+</html>
