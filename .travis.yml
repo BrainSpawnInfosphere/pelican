@@ -15,6 +15,7 @@ before_install:
     # # - git submodule update --init -- pelican-plugins/sitemap
     # - rm -fr pelican-plugins/liquid_tags
 
+
 install:
     - pip install -U pip setuptools wheel
     - pip install -U typogrify Markdown
