@@ -32,5 +32,6 @@ deploy:
     local_dir: www
     project_name: walchko.github.io
     repo: walchko.github.io
+    target_branch: master
     on:
         branch: master
