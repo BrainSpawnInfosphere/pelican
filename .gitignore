@@ -1,0 +1,13 @@
+old/
+*.pyc
+*.pid
+output/
+plugins/
+.DS_Store
+output
+feeds
+posts
+www/*
+*.old
+docs/*
+.DS_Store
