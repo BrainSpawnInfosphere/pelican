@@ -128,7 +128,7 @@ Once you download and install Raspbian you have to configure it for it to be use
     #. update ``raspi-config`` via the advanced option, update
     #. hostname
     #. memory split between GPU and RAM
-	#. set local to en-US (the default is en-GB)
+	#. set local to en_US.UTF-8 UTF-8 (the default is en-GB)
     #. resize the file system to the size of your disk
     #. set correct timezone via the internationalization option
     #. turn on I2C interface
