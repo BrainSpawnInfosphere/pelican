@@ -4,18 +4,35 @@ Ascii Art
 :date: 2017-01-07
 :summary: Creating ascii art
 
-.. figure:: https://cdn-learn.adafruit.com/assets/assets/000/032/618/medium800/adafruit_products_3006_kit_ORIG.jpg?1464029419
-  :align: center
-
 You can create ascii art from jpegs or text with the programs. The can be useful
 if you want some ascii art on your login prompt or whatever.::
 
 	jp2a --background=light -i --output='art.txt' <some_file.jpg>
 	figlet 'hello world'
 
+Install
+--------
+
 Use ``brew`` to install::
 
-	brew install jp2a
+	brew install jp2a figlet
+
+``figlet``
+-----------
+
+::
+
+	kevin@Logan ~ $ figlet hello world
+	 _          _ _                            _     _ 
+	| |__   ___| | | ___   __      _____  _ __| | __| |
+	| '_ \ / _ \ | |/ _ \  \ \ /\ / / _ \| '__| |/ _` |
+	| | | |  __/ | | (_) |  \ V  V / (_) | |  | | (_| |
+	|_| |_|\___|_|_|\___/    \_/\_/ \___/|_|  |_|\__,_|
+                                                   
+
+
+``jp2a``
+-----------
 
 Using::
 	
