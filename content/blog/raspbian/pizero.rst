@@ -37,3 +37,12 @@ This process sets up a dhcp server for the ``RNDIS/Ethernet Gadget`` and assigns
 it an IP address, then allows it to talk to the internet using WiFi.
 
 A good resource is `here <file:///Users/kevin/Desktop/Connect%20To%20A%20Raspberry%20Pi%20Zero%20With%20A%20USB%20Cable%20And%20SSH.htm>`__
+
+SSH
+-----
+
+To enable ``ssh``, go to the ``/boot`` directory and create a file called *ssh*:
+
+    touch ssh
+
+This will tell raspbian to enable it on boot.
