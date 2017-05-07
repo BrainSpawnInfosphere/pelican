@@ -164,12 +164,12 @@ Basic steps are:
 Bypass known_hosts
 ---------------------
 
-Since all RPi's hostname are raspberrypi.local, it sucks when you try to connect
+Since all RPi's hostname are raspberrypi.local, it **sucks** when you try to connect
 to a new one and you get the man-in-the-middle attack warning.
 
 You can disable the check with::
 
-	ssh -o UserKnownHostsFile=/dev/null username@hostname
+	ssh -o UserKnownHostsFile=/dev/null pi@raspberrypi.local
 
 OSX
 ~~~~
