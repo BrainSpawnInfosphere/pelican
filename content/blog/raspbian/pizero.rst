@@ -46,3 +46,13 @@ To enable ``ssh``, go to the ``/boot`` directory and create a file called *ssh*:
     touch ssh
 
 This will tell raspbian to enable it on boot.
+
+Bypass known_hosts
+---------------------
+
+Since all RPi's hostname are raspberrypi.local, it **sucks** when you try to connect
+to a new one and you get the man-in-the-middle attack warning.
+
+You can disable the check with::
+
+	ssh -o UserKnownHostsFile=/dev/null pi@raspberrypi.local
