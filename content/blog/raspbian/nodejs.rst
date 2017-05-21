@@ -19,8 +19,9 @@ on node.js <https://nodejs.org/en/download/package-manager/>`_ do the following:
 	curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 	sudo apt-get install -y nodejs
 
-Unfortunately this appears to install ``node`` to ``/usr/lib`` instead of 
-``/usr/local/lib``.
+**WARNING:** This installs ``node`` to ``/usr/lib`` instead of ``/usr/local/lib``.
+
+**WARNING:** This only works for ARMv7 (RPi 3) and doesn't work for ARMv6 (RPi2 or Zero)
 
 Packages
 ---------

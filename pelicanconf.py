@@ -49,6 +49,7 @@ STATIC_PATHS = [
     'blog/engineering/pics',
     'blog/macOS/pics',
     'blog/raspbian/pics',
+    'blog/raspbian/static',
     'blog/robots/pics',
     'blog/robots/static',
     'blog/cyber/pics',

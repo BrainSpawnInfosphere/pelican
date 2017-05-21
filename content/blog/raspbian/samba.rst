@@ -68,13 +68,14 @@ version is below:
 
 	#======================= Share Definitions =======================
 
-	[homes]
+	[pi]
 	   comment = Home Directories
 	   browseable = yes
 	   read only = no
 	   create mask = 0700
 	   directory mask = 0700
 	   valid users = %S
+	   path=/home/%S
 
 	[Mnt]
 	   comment = My shared stuff
