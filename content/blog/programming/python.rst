@@ -4,6 +4,9 @@ Python
 :date: 2017-02-17
 :summary: Python code snippets and useful libraries
 
+.. image:: {filename}/blog/programming/pics/python-snake.jpg
+	:width: 100%
+
 A useful reference is `Python Module of the Week <https://pymotw.com/2/contents.html>`_
 
 
