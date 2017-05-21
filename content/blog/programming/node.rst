@@ -2,11 +2,12 @@ Programming Node.js
 ======================
 
 :date: 2015-12-13
-:summary: Nodejs into to programming
+:modified: 2017-05-21
+:summary: Node.js/javascript snipets and useful libraries
 
 HTTP is one of the pillars behind the world wide web. HTTP describes the
-transfer of state between client an server. With HTTP, an embedded device can a
-nswer requests from other places in a network, or it can itself send updates or
+transfer of state between client an server. With HTTP, an embedded device can
+answer requests from other places in a network, or it can itself send updates or
 fetch instructions from a server.
 
 Using the http module
@@ -286,17 +287,48 @@ data from that device with websockets would look as follows:
 
 .. code-block:: javascript
 
-  var WebSocketServer = require('ws').Server;
-  var board = new firmata.Board(modem, function(err){
-    console.log('connected \n');
-    board.pinMode(13, board.MODES.OUTPUT);
-  var wss = new WebSocketServer({server: server});
-  wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(message) {
-      console.log('received: %s', message);
-    });
-  board.digitalRead(1, function(val, err) {
-    ws.send('{"state": ' + val + '}');
-    console.log(val);
-  });
-  });
+	var WebSocketServer = require('ws').Server;
+	var board = new firmata.Board(modem, function(err){
+		console.log('connected \n');
+		board.pinMode(13, board.MODES.OUTPUT);
+		var wss = new WebSocketServer({server: server});
+		wss.on('connection', function connection(ws) {
+			ws.on('message', function incoming(message) {
+				console.log('received: %s', message);
+			});
+			board.digitalRead(1, function(val, err) {
+				ws.send('{"state": ' + val + '}');
+				console.log(val);
+			});
+		});
+	});
+
+Running Code at Specific Times
+---------------------------------
+
+Run code at set intervals:
+
+.. code-block:: javascript
+
+  var ONE_MINUTE = 60 * 1000;
+
+  function showTime() {
+    console.log(new Date());
+  }
+
+  setInterval(showTime, ONE_MINUTE);
+
+Libraries
+------------
+
+- `Moments.js <http://momentjs.com/>`_ : time/date manipulation (16.6k)
+- `Chart.js <http://www.chartjs.org/>`_ : scatter, pie, polar, bar, etc charts
+- `Purecss <https://purecss.io/>`_ : A set of small, responsive CSS modules that you can use in every web project. Maintained by yahoo.
+- `FortAwesome <https://github.com/FortAwesome/Font-Awesome>`_ :
+- `Nunjucks <https://mozilla.github.io/nunjucks/>`_ : a templating engine very similar to python `jinja2 <http://jinja.pocoo.org/>`_ (8k gzipped)
+
+npm
+-------
+
+- `mjpeg server <https://www.npmjs.com/package/raspberry-pi-mjpeg-server>`_ : raspberry pi camera streamer
+- `Raspberry pi version <https://www.npmjs.com/package/raspi-ver>`_ : returns the version and other info for your RPi

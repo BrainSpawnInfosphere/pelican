@@ -1,14 +1,14 @@
-I2C
-===============
+Programming I2C
+=====================
 
 :date: 2016-04-21
 :modified: 2017-01-02
 :summary: Simple Python I2C example
 
-I2C (Inter-Integrated Circuit), pronounced I-squared-C, is a multi-master, multi-slave, 
-single-ended, serial computer bus invented by Philips Semiconductor (now NXP 
-Semiconductors). It is typically used for attaching lower-speed peripheral ICs to 
-processors and microcontrollers in short-distance, intra-board communication. Alternatively 
+I2C (Inter-Integrated Circuit), pronounced I-squared-C, is a multi-master, multi-slave,
+single-ended, serial computer bus invented by Philips Semiconductor (now NXP
+Semiconductors). It is typically used for attaching lower-speed peripheral ICs to
+processors and microcontrollers in short-distance, intra-board communication. Alternatively
 I2C is spelled I2C (pronounced I-two-C) or IIC (pronounced I-I-C).
 
 Addressing is based of a 7-bit addressing system, where each data packet looks like:
@@ -66,57 +66,57 @@ smbus-cffi
 .. code-block:: python
 
 	import smbus
-	# from Adafruit import smbus 
+	# from Adafruit import smbus
 	import time
- 
+
 	#bus = smbus.SMBus(0)  # Rev 1 Pi uses 0
 	bus = smbus.SMBus(1) # Rev 2 Pi uses 1
- 
+
 	DEVICE = 0x20 # Device address (A0-A2)
 	IODIRA = 0x00 # Pin direction register
 	OLATA  = 0x14 # Register for outputs
 	GPIOA  = 0x12 # Register for inputs
- 
+
 	# Set all GPA pins as outputs by setting
 	# all bits of IODIRA register to 0
 	bus.write_byte_data(DEVICE,IODIRA,0x00)
- 
+
 	# Set output all 7 output bits to 0
 	bus.write_byte_data(DEVICE,OLATA,0)
- 
+
 	for MyData in range(1,8):
 	  # Count from 1 to 8 which in binary will count
 	  # from 001 to 111
 	  bus.write_byte_data(DEVICE,OLATA,MyData)
 	  print MyData
 	  time.sleep(1)
- 
+
 	# Set all bits to zero
 	bus.write_byte_data(DEVICE,OLATA,0)
-	
+
 .. code-block:: python
 
-	# from Adafruit import smbus 
+	# from Adafruit import smbus
 	import smbus
 	import time
- 
+
 	# bus = smbus.SMBus(0)  # Rev 1 Pi uses 0
 	bus = smbus.SMBus(1) # Rev 2 Pi uses 1
- 
+
 	DEVICE = 0x20 # Device address (A0-A2)
 	IODIRA = 0x00 # Pin direction register
 	GPIOA  = 0x12 # Register for inputs
- 
+
 	# Set first 7 GPA pins as outputs and
 	# last one as input.
 	bus.write_byte_data(DEVICE,IODIRA,0x80)
- 
+
 	# Loop until user presses CTRL-C
 	while True:
- 
+
 	  # Read state of GPIOA register
 	  MySwitch = bus.read_byte_data(DEVICE,GPIOA)
- 
+
 	  if MySwitch & 0b10000000 == 0b10000000:
 		  print "Switch was pressed!"
 	      time.sleep(1)
@@ -124,17 +124,17 @@ smbus-cffi
 Converting between binary data and int, float, etc can be done with standard python libraries.
 
 .. code-block:: python
-	
+
 	import struct
 	import binascii
-	
+
 	binascii.unhexlify('010f')  # '\x01\x0f'
 	struct.pack('>h',0x010f)  # big endian '\x01\x0f'
 	struct.pack('<h',0x010f)  # little endian '\x0f\x01'
-	
+
 	b = struct.pack('<h',0x0101)  # '\x0f\x01'
 	struct.unpack('<h', b)  # (257,)
-	
+
 	# little endian conversions
 	struct.unpack('<h','\x00\xef')  # (-4352,) signed short
 	struct.unpack('<H','\x00\xef')  # (61184,) unsigned short

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
+import logging
 
 # coloring code snipets
 # pygmentize -S monokai -f html -a .highlight > pygment.css
@@ -40,6 +41,8 @@ PLUGINS = ["render_math", 'code_include', 'sitemap']
 
 MATH_JAX = {'align': 'left'}
 
+LOG_FILTER = [(logging.WARN, 'Empty alt attribute for image %s in %s')]
+
 USE_FOLDER_AS_CATEGORY = True
 
 STATIC_PATHS = [
@@ -47,10 +50,12 @@ STATIC_PATHS = [
     'blog/macOS/pics',
     'blog/raspbian/pics',
     'blog/robots/pics',
+    'blog/robots/static',
     'blog/cyber/pics',
     'blog/computers/pics',
     'blog/arch_linux/pics',
     'blog/programming/pics',
+    'blog/programming/static',
     'blog/repo/pics',
     'pages/pics',
     'pages/Publications',

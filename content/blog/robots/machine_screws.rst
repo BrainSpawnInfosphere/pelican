@@ -7,4 +7,4 @@ Machine Screws
 .. figure:: {filename}/blog/robots/pics/machine_screws.jpg
     :align: center
 
-A good table of sizes is `here <{filename}/blog/robots/TapDrillSizes.pdf>`_
+A good table of sizes is `here <{filename}/blog/robots/static/TapDrillSizes.pdf>`_
