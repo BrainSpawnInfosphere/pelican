@@ -1,0 +1,7 @@
+{% if DISPLAY_PAGES_ON_MENU %}
+{% for title, link in MENUITEMS %}
+  <a class="logo" href="{{ SITEURL }}/{{ link }}">{{ title }}</a>
+{% endfor %}
+{% endif %}
+
+<!-- <div class="push"></div> -->

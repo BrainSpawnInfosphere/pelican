@@ -1,0 +1,15 @@
+<!-- This is used for the catagory page that lists all articles in one category -->
+
+{% extends "base.html" %}
+{% block content_title %}{% endblock %}
+{% block content %}
+{% if articles %}
+{% for article in articles_page.object_list %}
+
+<h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
+<h5><i class="fl-rocket"></i> {{ article.locale_date }} </h5>
+{{ article.summary|striptags }}
+{% endfor %}
+{% endif %}
+{% include "_includes/pagination.html" %}
+{% endblock content %}

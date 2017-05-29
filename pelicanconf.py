@@ -46,28 +46,27 @@ LOG_FILTER = [(logging.WARN, 'Empty alt attribute for image %s in %s')]
 USE_FOLDER_AS_CATEGORY = True
 
 STATIC_PATHS = [
-    'blog/engineering/pics',
-    'blog/macOS/pics',
-    'blog/raspbian/pics',
-    'blog/raspbian/static',
-    'blog/robots/pics',
-    'blog/robots/static',
-    'blog/cyber/pics',
-    'blog/computers/pics',
-    'blog/arch_linux/pics',
-    'blog/programming/pics',
-    'blog/programming/static',
-    'blog/repo/pics',
-    'pages/pics',
-    'pages/Publications',
-    # 'images',
-    'extra/robots.txt',
-    'extra/favicon.ico'
+	'blog/engineering/pics',
+	'blog/macOS/pics',
+	'blog/raspbian/pics',
+	'blog/raspbian/static',
+	'blog/robots/pics',
+	'blog/robots/static',
+	'blog/cyber/pics',
+	'blog/computers/pics',
+	'blog/arch_linux/pics',
+	'blog/programming/pics',
+	'blog/programming/static',
+	'blog/repo/pics',
+	'pages/pics',
+	'pages/Publications',
+	'extra/robots.txt',
+	# 'extra/favicon.ico'
 ]
 
 EXTRA_PATH_METADATA = {
-    'extra/robots.txt': {'path': 'robots.txt'},
-    'extra/favicon.ico': {'path': 'favicon.ico'}
+	'extra/robots.txt': {'path': 'robots.txt'}
+	# 'extra/favicon.ico': {'path': 'favicon.ico'}
 }
 
 # used by sitemap plugin and robots.txt
@@ -85,16 +84,12 @@ SITEMAP = {
     }
 }
 
-GITHUB_ADDRESS = 'http://github.com/walchko'
-SO_ADDRESS = 'http://stackoverflow.com/users/5374768/kevin'
-SE_ADDRESS = 'http://raspberrypi.stackexchange.com/users/1677/kevin'
-
 # number of words in a summary
 SUMMARY_MAX_LENGTH = 100
 
 DEFAULT_DATE_FORMAT = ('%a %d %B %Y')
 
-THEME = './themes/kevin'
+THEME = './themes/kevin2'
 
 ARTICLE_URL = "posts/{date:%Y}/{date:%m}/{slug}"
 ARTICLE_SAVE_AS = "posts/{date:%Y}/{date:%m}/{slug}/index.html"

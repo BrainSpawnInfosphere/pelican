@@ -1,0 +1,15 @@
+<!-- <div class="header">
+	<div class="logo"><a href="{{ SITEURL }}">{{ SITENAME }}</a></div>
+</div> -->
+
+<div id="header-wrapper">
+<!-- <div class="header"> -->
+	<div class="title xtralarge bold"><a href="{{ SITEURL }}">{{ SITENAME }}</a></div>
+	{% if SITESUBTITLE %}
+	<div class="normal small">{{ SITESUBTITLE }}</div>
+	{% endif %}
+
+	<div class="nav normal">
+		{% include '_includes/pages.html' %}
+	</div>
+</div>
