@@ -61,12 +61,12 @@ STATIC_PATHS = [
 	'pages/pics',
 	'pages/Publications',
 	'extra/robots.txt',
-	'extra/favicon.ico'
+	# 'extra/favicon.ico'
 ]
 
 EXTRA_PATH_METADATA = {
-    'extra/robots.txt': {'path': 'robots.txt'},
-    'extra/favicon.ico': {'path': 'favicon.ico'}
+	'extra/robots.txt': {'path': 'robots.txt'}
+	# 'extra/favicon.ico': {'path': 'favicon.ico'}
 }
 
 # used by sitemap plugin and robots.txt

@@ -8,12 +8,7 @@ git:
     submodules: false
 
 before_install:
-    # - pip install IPython[notebook]
     - git submodule update --init --recursive
-    # - git submodule update --init -- pelican-plugins/render_math
-    # - git submodule update --init -- pelican-plugins/code_include
-    # # - git submodule update --init -- pelican-plugins/sitemap
-    # - rm -fr pelican-plugins/liquid_tags
 
 
 install:
@@ -23,8 +18,7 @@ install:
 
 script:
     - make html
-    # - ls
-    
+
 
 deploy:
     provider: pages
