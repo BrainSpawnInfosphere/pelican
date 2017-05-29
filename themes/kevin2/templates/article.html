@@ -7,12 +7,9 @@
 {% block author %}<meta name="author" content="{{ article.author  }}">{%endblock%}
 {% block content %}
 
-<!-- {% if author_gravatar %}<img src="{{author_gravatar}}"/>{% endif %} -->
-
 <h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
-<h5><i class="icon-feather"></i> {{ article.locale_date }}
-	{% if article.update %} &nbsp; <i class="icon-spin4"></i> {{ article.update }} {% endif %}
-<i class="icon-bookmarks"></i>
+<h5><i class="fl-rocket"></i> {{ article.locale_date }}
+
 {% for tag in article.tags %}
 <span><a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a> / </span>
 {% endfor %}
