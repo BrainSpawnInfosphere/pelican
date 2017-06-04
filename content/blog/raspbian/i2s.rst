@@ -200,3 +200,4 @@ References
 * `pimoroni <http://learn.pimoroni.com/tutorial/phat/raspberry-pi-phat-dac-install>`_
 * `Raspberry Pi pinout <http://pinout.xyz/>`_
 * `Alsa mixer command line <http://blog.scphillips.com/posts/2013/01/sound-configuration-on-raspberry-pi-with-alsa/>`_
+* `Fixing alsa issues with espeak <https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=136974#>`_
