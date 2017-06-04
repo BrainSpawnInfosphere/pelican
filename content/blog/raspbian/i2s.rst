@@ -2,6 +2,7 @@ Digital Audio (I2S)
 =====================
 
 :date: 2016-07-26
+:modified: 2017-06-04
 :summary: Setting up an RPi3/Raspbian-Jessie with digital audio and avoiding the noise from the Pi's analog output
 
 .. figure:: https://cdn-learn.adafruit.com/assets/assets/000/032/618/medium800/adafruit_products_3006_kit_ORIG.jpg?1464029419
@@ -16,14 +17,31 @@ Edit ``/boot/config.txt``::
   # dtparam=audio=off
   dtparam=i2s=on
   dtoverlay=hifhiberry-dac
+  dtoverlay=i2s-mmap
 
 Create/edit ``/etc/asound.conf`` to setup default audio::
 
-  pcm.!default  {
-    type hw card 0
+  pcm.hifiberry { 
+    type hw card 0 
   }
-  ctl.!default {
-    type hw card 0
+
+  pcm.!default { 
+    type plug 
+    slave.pcm "dmixer" 
+  }
+
+  pcm.dmixer { 
+    type dmix 
+    ipc_key 1024 
+    slave { 
+      pcm "hifiberry" 
+      channels 2 
+    } 
+  }
+
+  ctl.dmixer { 
+    type hw 
+    card 0 
   }
 
 Now you have to reboot so the system gets setup correctly (remember, these are boot parameter settings).
@@ -53,12 +71,29 @@ Now, lots of instructions on the internet say to disable i2c, but you don't have
   dtparam=i2s=on
   enable_uart=0
   dtoverlay=hifiberry-dac
+  dtoverlay=i2s-mmap
 
 As you can see, I leave i2c on. Note the ``enable_uart=0`` is so I can use bluetooth. Apparently, the BT module is tied to
 the hardware serial port and the don't bother to tell people. You have to spend a lot of time to dig it up.
 
+Jack Server
+~~~~~~~~~~~~~~
+
+Not sure you need this::
+
+  sudo apt-get --no-install-recommends install jackd2
+  jackd -d alsa
+
 Test
 -----
+
+You can list the devices ALSA see with::
+
+  pi@robot ~ $ aplay -l
+  **** List of PLAYBACK Hardware Devices ****
+  card 0: sndrpihifiberry [snd_rpi_hifiberry_dac], device 0: HifiBerry DAC HiFi pcm5102a-hifi-0 []
+    Subdevices: 1/1
+    Subdevice #0: subdevice #0
 
 1. Random static: ``speaker-test -c2``
 2. Wave file: ``speaker-test -c2 --test=wav -w /usr/share/sounds/alsa/Front_Center.wav``
