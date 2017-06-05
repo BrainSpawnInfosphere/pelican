@@ -92,9 +92,7 @@ Issues
 ~~~~~~~~~
 
 I still had lots of issues. installing ``sudo apt-get install speech-dispatcher`` seemed to help.
-I now had pulse audio and `alsamixer` working. You can also use the commands to change volume::
-
-
+I now had pulse audio and `alsamixer` working. 
 
 If you get errors about unknown cards::
 
@@ -131,6 +129,7 @@ So we see our I2S amp (snd_rpi_hifiberry_dac) listed there, so we are ready to t
 
       wget https://cdn.shopify.com/s/files/1/0062/6682/files/sample.wav
       aplay sample.wav
+      
 5. Text to speach::
 
       sudo apt-get install espeak
@@ -160,6 +159,9 @@ Or use `sox`::
 
 Alsa Mixer
 -------------
+
+.. figure:: {filename}/pics/alsamixer.png
+	:align: center
 
 To see what you have access to::
 
