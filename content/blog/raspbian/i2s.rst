@@ -1,4 +1,4 @@
-Digital Audio (I2S)
+I2S - Digital Audio
 =====================
 
 :date: 2016-07-26
