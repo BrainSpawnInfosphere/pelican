@@ -5,13 +5,22 @@ Programming Node.js
 :modified: 2017-05-21
 :summary: Node.js/javascript snipets and useful libraries
 
+Libraries
+------------
+
+- `Moments.js <http://momentjs.com/>`_ : time/date manipulation (16.6k)
+- `Chart.js <http://www.chartjs.org/>`_ : scatter, pie, polar, bar, etc charts
+- `Purecss <https://purecss.io/>`_ : A set of small, responsive CSS modules that you can use in every web project. Maintained by yahoo.
+- `FortAwesome <https://github.com/FortAwesome/Font-Awesome>`_ :
+- `Nunjucks [not that great] <https://mozilla.github.io/nunjucks/>`_ : a templating engine very similar to python `jinja2 <http://jinja.pocoo.org/>`_ (8k gzipped)
+
+Using the http module
+-----------------------
+
 HTTP is one of the pillars behind the world wide web. HTTP describes the
 transfer of state between client an server. With HTTP, an embedded device can
 answer requests from other places in a network, or it can itself send updates or
 fetch instructions from a server.
-
-Using the http module
------------------------
 
 In Node.js, the simplest way to turn a device into a network application is
 with http. This module is part of the Node.js core library, and you find a nice
@@ -318,17 +327,10 @@ Run code at set intervals:
 
   setInterval(showTime, ONE_MINUTE);
 
-Libraries
-------------
-
-- `Moments.js <http://momentjs.com/>`_ : time/date manipulation (16.6k)
-- `Chart.js <http://www.chartjs.org/>`_ : scatter, pie, polar, bar, etc charts
-- `Purecss <https://purecss.io/>`_ : A set of small, responsive CSS modules that you can use in every web project. Maintained by yahoo.
-- `FortAwesome <https://github.com/FortAwesome/Font-Awesome>`_ :
-- `Nunjucks <https://mozilla.github.io/nunjucks/>`_ : a templating engine very similar to python `jinja2 <http://jinja.pocoo.org/>`_ (8k gzipped)
 
 npm
 -------
 
 - `mjpeg server <https://www.npmjs.com/package/raspberry-pi-mjpeg-server>`_ : raspberry pi camera streamer
 - `Raspberry pi version <https://www.npmjs.com/package/raspi-ver>`_ : returns the version and other info for your RPi
+- `Great info on how to use npm <https://www.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/>`_
