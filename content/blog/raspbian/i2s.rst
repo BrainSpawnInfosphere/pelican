@@ -160,7 +160,7 @@ Or use `sox`::
 Alsa Mixer
 -------------
 
-.. figure:: {filename}/pics/alsamixer.png
+.. figure:: {filename}blog/raspbian/pics/alsamixer.png
 	:align: center
 
 To see what you have access to::
