@@ -193,6 +193,7 @@ Now to make some changes:
 * Mute all sound (switch Master): ``amixer cset numid=4 off``
 * Save changes to ``/var/lib/alsa/asound.state``: ``sudo alsactl store``
 * Reset system if you f@$k up: ``sudo /etc/init.d/alsa-utils reset``
+
 References
 -----------
 
