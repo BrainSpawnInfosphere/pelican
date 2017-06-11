@@ -130,3 +130,8 @@ Networking
 -------------
 
 A really good resource for network programming with python is `here <{filename}/blog/programming/static/PythonNetBinder.pdf>`_
+
+References
+-------------
+
+- `Python Operators <https://www.tutorialspoint.com/python/bitwise_operators_example.htm>`_
