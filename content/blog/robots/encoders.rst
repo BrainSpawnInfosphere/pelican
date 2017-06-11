@@ -53,10 +53,40 @@ microcontroller is too slow and/or the speed of your wheel is too fast, you
 could get stuck answering interrupts all the time and never doing anything
 else. You have to balance your system constraints properly.
 
+Python Psudo Code
+--------------------
 
+.. code-block:: python
 
+  import time
+  from serial import Serial
+  
+  count = 0
+  COUNTS_TO_METERS = 0.001  # this depends on the encoder system
+  
+  def main_loop():
+    ser = Serial('/dev/tty.usbserial0', 115200)
+    
+    while True:
+      time.sleep(1)  # time depends on speed of robot
+      position += count * COUNTS_TO_METERS
+      count = 0
+      
+      # a super simple serial responce to report position
+      if ser.read() == 'p':
+        ser.write(position)
+  
+  # an interrupt that gets called every time A or B changes
+  # you can do this with RPi.GPIO on the raspberry pi
+  def interrupt_AB():
+    A, B = readEncoderPins()
+    if A ^ B == 1:
+      count += 1
+    else:
+      count -= 1
 
 References
 =============
 
 - `Dead Reckoning Wikipedia <https://en.wikipedia.org/wiki/Dead_reckoning>`_
+- `Interrupts <http://raspi.tv/2013/how-to-use-interrupts-with-python-on-the-raspberry-pi-and-rpi-gpio-part-3>`_
