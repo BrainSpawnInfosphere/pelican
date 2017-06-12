@@ -11,3 +11,4 @@ www/*
 *.old
 docs/*
 .DS_Store
+.gists

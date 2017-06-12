@@ -9,6 +9,10 @@ Python
 
 A useful reference is `Python Module of the Week <https://pymotw.com/2/contents.html>`_
 
+Simple hello world
+---------------------
+
+.. gist:: walchko/7dea22efcab640d0094e8e90fb851301 hello_world.py python
 
 The Future is Now
 -------------------

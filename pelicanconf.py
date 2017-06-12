@@ -33,7 +33,8 @@ DEFAULT_PAGINATION = 1000
 PLUGIN_PATHS = ['./pelican-plugins']
 
 # PLUGINS = ["render_math", 'code_include', 'simple_footnotes', 'sitemap']
-PLUGINS = ["render_math", 'code_include', 'sitemap']
+# PLUGINS = ["render_math", 'code_include', 'sitemap', 'pelican_gist']
+PLUGINS = ["render_math", 'code_include', 'sitemap', 'gist_directive']
 # render_math - latex equations
 # sitemap - for spiders, listed in robot.txt
 # code_include - include code from other files
