@@ -48,15 +48,15 @@ Create/edit ``/etc/asound.conf`` to setup default audio::
 
 Now you have to reboot so the system gets setup correctly (remember, these are boot parameter settings).
 
-Now connect the amp to the rpi:
+Now connect the amp to the rpi where Vin is 5V:
 
-===== ======
-Vin   5V
-Gnd   Gnd
-DIN   21
-BCLK  18
-LRCLK 19
-===== ======
+===== ====== ======
+      BCM    Pi
+===== ====== ======
+DIN   21     40
+BCLK  18     12
+LRCLK 19     35
+===== ====== ======
 
 .. figure:: https://cdn-learn.adafruit.com/assets/assets/000/032/643/medium800/adafruit_products_3006_top_demo_ORIG.jpg?1464037283
   :align: center
