@@ -16,7 +16,8 @@ This uses *only* python for serving up the mjpeg stream. There are a couple of i
   don't seem to work for this and it is because of how BaseTTPServer is designed.
 
 
-.. gist:: walchko/783a68a0bdfd2a93c7cf3009c882dc74 mjpeg.py python
+.. gist:: walchko/0deed4152896e1940b0fe93c9eb4d061 mjpeg2.py python
+
 
 Flask instead of BaseHTTPServer
 ----------------------------------
