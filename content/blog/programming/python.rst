@@ -130,6 +130,20 @@ Netaddr
 	>>> netaddr.valid_ipv4('192.168.1.300')
 	False
 
+Get IP Address from Interface
+--------------------------------
+
+.. code-block:: python
+
+	import os, re
+	
+	def getIP(iface):
+		search_str = 'ip addr show wlan0'.format(iface)
+		ipv4 = re.search(re.compile(r'(?<=inet )(.*)(?=\/)', re.M), os.popen(search_str).read()).groups()[0]
+		ipv6 = re.search(re.compile(r'(?<=inet6 )(.*)(?=\/)', re.M), os.popen(search_str).read()).groups()[0]
+		return (ipv4, ipv6)
+
+
 Networking
 -------------
 
