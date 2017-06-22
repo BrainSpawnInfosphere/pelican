@@ -1,8 +1,7 @@
 Python Modules
 ===============
 
-:date: 2015-09-14
-:modified: 2016-09-04
+:date: 2017-06-21
 :summary: Making a Python package for Pypi
 
 Module Setup
@@ -121,3 +120,11 @@ The structure of a .pypirc file is pretty simple::
 	repository: https://www.python.org/pypi
 	username: <username>
 	password: <password>
+
+Wheel and Eggs
+----------------
+
+They are basically just zip files::
+
+	$ unzip -l /path/to/file.egg
+	$ unzip -l /path/to/file.whl
