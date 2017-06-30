@@ -14,6 +14,21 @@ Simple hello world
 
 .. gist:: walchko/7dea22efcab640d0094e8e90fb851301 hello_world.py python
 
+Linux Fixing Python Path
+----------------------------
+
+Edit ``/etc/python3.4/sitecustomize.py``:
+
+.. code-block:: python
+
+	import sys, os
+	my_site = os.path.join(os.environ['HOME'],
+                       '/usr/local/lib/python3.4/dist-packages')
+	sys.path.insert(0, my_site)
+
+For some retarded reason, I keep installing updates with ``pip3``, but it doesn't
+see them in ``/usr/local/lib/python3.4/ ..`` directory, it looks in ``/usr/lib/python3.4 ..``.
+
 The Future is Now
 -------------------
 
