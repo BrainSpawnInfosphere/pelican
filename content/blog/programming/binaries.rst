@@ -4,6 +4,9 @@ Binary Files
 :date: 2017-06-29
 :summary: Working with binary files on Linux
 
+Determine ARM Type
+--------------------
+
 Determine type of binary, in this case, ARMv6:
 
 .. code-block:: bash
@@ -27,3 +30,19 @@ Determine type of binary, in this case, ARMv6:
     Tag_ABI_VFP_args: VFP registers
     Tag_CPU_unaligned_access: v6
     Tag_ABI_FP_16bit_format: IEEE 754
+
+Determine needed Libraries
+-----------------------------
+
+.. code-block:: bash
+
+    pi@fry opencv3 $ readelf -d /usr/lib/liblapack.so | grep NEEDED
+     0x00000001 (NEEDED)                     Shared library: [libblas.so.3]
+     0x00000001 (NEEDED)                     Shared library: [libatlas.so.3]
+     0x00000001 (NEEDED)                     Shared library: [libgfortran.so.3]
+     0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+     0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+     0x00000001 (NEEDED)                     Shared library: [libm.so.6]
+     0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+     0x00000001 (NEEDED)                     Shared library: [ld-linux-armhf.so.3]
+ 
