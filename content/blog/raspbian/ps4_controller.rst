@@ -5,53 +5,9 @@ PS4 Controller
 :modified: 2016-07-28
 :summary: How to hook up your PS4 controller to Raspbian.
 
-Finally Got Working
----------------------
-
-There are issues with `serial port on rpi 3 <http://raspberrypi.stackexchange.com/questions/45570/how-do-i-make-serial-work-on-the-raspberry-pi3>`_
-
-::
-
-	pi@zoidberg ~ $ more /boot/cmdline.txt
-	dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4
-	elevator=deadline fsck.repair=yes rootwait
-
-::
-
-	sudo apt-get install joystick
-
-The info below will allow you to connect a PS4 and get you ``/dev/input/js0`` however,
-only the touch pad worked when I did ``jstest /dev/input/js0``
-(or you could do ``cat /dev/input/js0`` but only strange characters appear, but it
-works too).
-
-So do ``pip install ds4drv`` (you need version 0.5.1 to work on jessie/rpi3) and
-it will go through and pair your device. Also follow the instructions on
-`ds4drv <https://github.com/chrippa/ds4drv>`_ to setup udev right. Then run:
-
-::
-
-	ds4drv
-
-This will pair and setup your joystick to work (I use SDL2 as my joystick interface)
-and it work great.
-
-Also note, the light bar in the front should be strong, bright blue when paired.
-Using the instructions below, and only getting it to partially work, my light
-bar was blue, but dimm.
-
-References
--------------
-
-* `PS4 wiki <http://www.psdevwiki.com/ps4/DualShock_4>`_
-* http://eleccelerator.com/wiki/index.php?title=DualShock_4
-* `ds4drv <https://github.com/chrippa/ds4drv>`_
 
 
---------------------------------------------------------------
-
-
-Older but useful info
+Setup Bluetooth
 ----------------------
 
 Reference `here <http://pes.mundayweb.com/html/Using%20PS4%20Control%20Pads%20via%20Bluetooth.html>`_
@@ -247,3 +203,46 @@ You should see some strange characters appear as you use the joystick.
 
 	sudo apt-get install joystick
 	jstest /dev/input/js0
+
+	
+Finally Got Working
+---------------------
+
+There are issues with `serial port on rpi 3 <http://raspberrypi.stackexchange.com/questions/45570/how-do-i-make-serial-work-on-the-raspberry-pi3>`_
+
+::
+
+	pi@zoidberg ~ $ more /boot/cmdline.txt
+	dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4
+	elevator=deadline fsck.repair=yes rootwait
+
+::
+
+	sudo apt-get install joystick
+
+The info below will allow you to connect a PS4 and get you ``/dev/input/js0`` however,
+only the touch pad worked when I did ``jstest /dev/input/js0``
+(or you could do ``cat /dev/input/js0`` but only strange characters appear, but it
+works too).
+
+So do ``pip install ds4drv`` (you need version 0.5.1 to work on jessie/rpi3) and
+it will go through and pair your device. Also follow the instructions on
+`ds4drv <https://github.com/chrippa/ds4drv>`_ to setup udev right. Then run:
+
+::
+
+	ds4drv
+
+This will pair and setup your joystick to work (I use SDL2 as my joystick interface)
+and it work great.
+
+Also note, the light bar in the front should be strong, bright blue when paired.
+Using the instructions below, and only getting it to partially work, my light
+bar was blue, but dimm.
+
+References
+-------------
+
+* `PS4 wiki <http://www.psdevwiki.com/ps4/DualShock_4>`_
+* http://eleccelerator.com/wiki/index.php?title=DualShock_4
+* `ds4drv <https://github.com/chrippa/ds4drv>`_
