@@ -10,7 +10,7 @@ import logging
 AUTHOR = u'walchko'
 SITENAME = u'Planet Express'
 SITESUBTITLE = "Our crew is replaceable. Your package isn't."
-SITEURL = 'http://walchko.github.io/'
+SITEURL = 'http://walchko.github.io'
 
 PATH = 'content'
 
@@ -37,6 +37,7 @@ PLUGIN_PATHS = ['./pelican-plugins']
 # PLUGINS = ["render_math", 'code_include', 'simple_footnotes', 'sitemap']
 # PLUGINS = ["render_math", 'code_include', 'sitemap', 'pelican_gist']
 PLUGINS = ["render_math", 'code_include', 'sitemap', 'gist_directive']
+# PLUGINS = ["render_math", 'code_include', 'sitemap']
 # render_math - latex equations
 # sitemap - for spiders, listed in robot.txt
 # code_include - include code from other files

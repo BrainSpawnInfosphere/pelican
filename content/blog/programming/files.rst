@@ -16,6 +16,6 @@ between macOS and Linux. Linux uses the bsd database and setting up python to
 use it on macOS was a pain.
 
 The simple test below compares pickle, pickle with gzip, and json. Json was the
-the easiest and peformed just as well.
+the easiest and performed just as well.
 
 .. gist:: walchko/bb979d854ddd5197c090931a7f25a826 test.py python

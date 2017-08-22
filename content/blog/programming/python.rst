@@ -151,7 +151,7 @@ Get IP Address from Interface
 .. code-block:: python
 
 	import os, re
-	
+
 	def getIP(iface):
 		search_str = 'ip addr show wlan0'.format(iface)
 		ipv4 = re.search(re.compile(r'(?<=inet )(.*)(?=\/)', re.M), os.popen(search_str).read()).groups()[0]

@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 PY?=python
 PELICAN?=pelican
-PELICANOPTS=
+PELICANOPTS= -D
 
 BASEDIR=$(CURDIR)
 INPUTDIR=$(BASEDIR)/content
