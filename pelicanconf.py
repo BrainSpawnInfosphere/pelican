@@ -33,6 +33,7 @@ AUTHOR_FEED_RSS = None
 DEFAULT_PAGINATION = 1000
 
 PLUGIN_PATHS = ['./pelican-plugins']
+# PLUGIN_PATHS = ['../pelican-plugins']
 
 # PLUGINS = ["render_math", 'code_include', 'simple_footnotes', 'sitemap']
 # PLUGINS = ["render_math", 'code_include', 'sitemap', 'pelican_gist']
