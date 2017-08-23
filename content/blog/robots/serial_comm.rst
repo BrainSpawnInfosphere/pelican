@@ -2,7 +2,7 @@ Serial Communication
 ========================
 
 :date: 2016-08-22
-:modified: 2017-02-13
+:modified: 2017-08-13
 :summary: Simple serial info
 
 If you need to quickly use a serial port, use ``pyserial``::
@@ -22,12 +22,19 @@ A simple python script is:
 
 	import serial
 
-	# s = serial.Serial('/dev/ttyS0', 19200, timeout=1)
+	# s = serial.Serial('/dev/ttyS0', 19200, timeout=0.1)
 	s = serial.Serial()
 	s.baudrate = 19200
 	s.port = '/dev/serial0'
+	s.timeout = 0.1
+	s.open()
 	s.write('hello')
-	s.close()
+
+	msg = s.read(100)
+	print(msg)
+
+	if s.is_open:
+		s.close()
 
 - `pyserial docs <http://pyserial.readthedocs.io>`_
 

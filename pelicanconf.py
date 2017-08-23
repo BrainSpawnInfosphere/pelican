@@ -9,15 +9,14 @@ import logging
 
 AUTHOR = u'walchko'
 SITENAME = u'Planet Express'
-SITESUBTITLE = "Our crew is replaceable. Your package isn't."
+SITESUBTITLE = u"Our crew is replaceable. Your package isn't."
 SITEURL = 'http://walchko.github.io'
 
-PATH = 'content'
+PATH = u'content'
 
 # DELETE_OUTPUT_DIRECTORY = False don't use this, it wipes the .git directory
-# OUTPUT_PATH = '/Users/kevin/google_drive/github/walchko.github.io/'
 
-TIMEZONE = 'US/Mountain'
+TIMEZONE = u'US/Mountain'
 
 DEFAULT_LANG = u'en'
 
@@ -39,7 +38,6 @@ PLUGINS = ["render_math", 'code_include', 'sitemap', 'gist_directive']
 # render_math - latex equations
 # sitemap - for spiders, listed in robot.txt
 # code_include - include code from other files
-# simple_footnotes - may not use
 # gist_directive - link to gist code snippets
 
 MATH_JAX = {'align': 'left'}
@@ -63,13 +61,11 @@ STATIC_PATHS = [
 	'blog/repo/pics',
 	'pages/pics',
 	'pages/Publications',
-	'extra/robots.txt',
-	# 'extra/favicon.ico'
+	'extra/robots.txt'
 ]
 
 EXTRA_PATH_METADATA = {
 	'extra/robots.txt': {'path': 'robots.txt'}
-	# 'extra/favicon.ico': {'path': 'favicon.ico'}
 }
 
 # used by sitemap plugin and robots.txt
@@ -86,6 +82,8 @@ SITEMAP = {
         'pages': 'monthly'
     }
 }
+
+# PYGMENTS_RST_OPTIONS = {'linenos': 'inline'}
 
 # number of words in a summary
 SUMMARY_MAX_LENGTH = 100

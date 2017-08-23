@@ -2,7 +2,7 @@ Servo Control
 =====================
 
 :date: 2017-01-02
-:summary: How to control a rc servo
+:summary: How to control a RC servo
 
 RC Servo
 ---------
@@ -16,10 +16,10 @@ RC Servo
 Control
 ----------
 
-There are many ways to control an RC servo and both the Arduino and the RPi have 
+There are many ways to control an RC servo and both the Arduino and the RPi have
 software libraries to do that. However, that consumes a small amount of overhead (processor
 power) and you may not want that.
-    
+
 
 .. figure:: {filename}/blog/robots/pics/servo_controller_9685.jpg
     :align: center
@@ -29,7 +29,7 @@ Adafruit 16-Channel 12-bit PWM/Servo Driver - I2C interface `PCA9685 <https://ww
 is a good hardware solution that is controlled via i2c. This is nice, because you can
 hook up a bunch of these and control more servos than you could ever want! The Adafruit
 `tutorial <https://learn.adafruit.com/adafruit-16-channel-servo-driver-with-raspberry-pi>`_
-does a great job of showing how to hook this up and the python library is 
+does a great job of showing how to hook this up and the python library is
 `here <https://github.com/adafruit/Adafruit_Python_PCA9685>`_ in their github account.
 
 I used it to make a simple 4 legged (quadruped) robot.
@@ -37,7 +37,7 @@ I used it to make a simple 4 legged (quadruped) robot.
 .. figure:: {filename}/blog/robots/pics/rc-spider-1.jpg
     :align: center
     :width: 400px
-    
+
 
 Python
 --------
