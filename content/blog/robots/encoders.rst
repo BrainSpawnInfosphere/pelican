@@ -4,7 +4,7 @@ Dead Reckoning and Encoders
 :date: 2017-06-11
 :summary: How to use wheel encoders to determine distance travelled
 
-.. figure:: {filename}/blog/robots/pics/usdigital_encoder.gif
+.. figure:: {filename}/blog/robots/pics/usdigital_encoder.jpg
 	:align: center
 
 There are many types of encoders, above is a US Digital encoder designed to

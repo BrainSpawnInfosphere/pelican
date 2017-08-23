@@ -23,27 +23,27 @@ Edit ``/boot/config.txt``::
 
 Create/edit ``/etc/asound.conf`` to setup default audio::
 
-  pcm.hifiberry { 
-    type hw card 0 
+  pcm.hifiberry {
+    type hw card 0
   }
 
-  pcm.!default { 
-    type plug 
-    slave.pcm "dmixer" 
+  pcm.!default {
+    type plug
+    slave.pcm "dmixer"
   }
 
-  pcm.dmixer { 
-    type dmix 
-    ipc_key 1024 
-    slave { 
-      pcm "hifiberry" 
-      channels 2 
-    } 
+  pcm.dmixer {
+    type dmix
+    ipc_key 1024
+    slave {
+      pcm "hifiberry"
+      channels 2
+    }
   }
 
-  ctl.dmixer { 
-    type hw 
-    card 0 
+  ctl.dmixer {
+    type hw
+    card 0
   }
 
 Now you have to reboot so the system gets setup correctly (remember, these are boot parameter settings).
@@ -92,7 +92,7 @@ Issues
 ~~~~~~~~~
 
 I still had lots of issues. installing ``sudo apt-get install speech-dispatcher`` seemed to help.
-I now had pulse audio and `alsamixer` working. 
+I now had pulse audio and `alsamixer` working.
 
 If you get errors about unknown cards::
 
@@ -100,7 +100,7 @@ If you get errors about unknown cards::
   ALSA lib pcm.c:2239:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
   ALSA lib pcm.c:2239:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
 
-Edit ``/usr/share/alsa/alsa.conf`` and change the cards from ``pcm.front cards.pcm.front`` to 
+Edit ``/usr/share/alsa/alsa.conf`` and change the cards from ``pcm.front cards.pcm.front`` to
 ``pcm.front cards.pcm.default``.
 
 Test
@@ -129,7 +129,7 @@ So we see our I2S amp (snd_rpi_hifiberry_dac) listed there, so we are ready to t
 
       wget https://cdn.shopify.com/s/files/1/0062/6682/files/sample.wav
       aplay sample.wav
-      
+
 5. Text to speach::
 
       sudo apt-get install espeak
@@ -141,12 +141,12 @@ Check File Types
 
 Also, you can see what the file is::
 
-  pi@r2d2 tmp $ file sample.wav 
+  pi@r2d2 tmp $ file sample.wav
   sample.wav: RIFF (little-endian) data, WAVE audio, Microsoft PCM, 8 bit, mono 11025 Hz
 
 Or use `sox`::
 
-  pi@r2d2 tmp $ soxi sample.wav 
+  pi@r2d2 tmp $ soxi sample.wav
 
   Input File     : 'sample.wav'
   Channels       : 1
@@ -160,7 +160,7 @@ Or use `sox`::
 Alsa Mixer
 -------------
 
-.. figure:: {filename}blog/raspbian/pics/alsamixer.png
+.. figure:: {filename}/blog/raspbian/pics/alsamixer.png
 	:align: center
 
 To see what you have access to::
@@ -179,7 +179,7 @@ To see what you have access to::
     Limits: Capture 0 - 65536
     Front Left: Capture 65536 [100%] [on]
     Front Right: Capture 65536 [100%] [on]
-    
+
   pi@r2d2 ~ $ amixer controls
   numid=4,iface=MIXER,name='Master Playback Switch'
   numid=3,iface=MIXER,name='Master Playback Volume'
