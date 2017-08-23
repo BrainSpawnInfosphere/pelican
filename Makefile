@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-PY?=python
+PY?=python2
 PELICAN?=pelican
 PELICANOPTS= -D
 
