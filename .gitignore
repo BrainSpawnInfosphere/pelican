@@ -12,3 +12,4 @@ www/*
 docs/*
 .DS_Store
 .gists
+pelican-plugins

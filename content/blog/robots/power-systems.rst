@@ -15,9 +15,8 @@ way is to design your circuit so it prevents this.
 Diodes
 -------
 
-.. raw:: html
+.. image:: {filename}/blog/robots/pics/reverse_polarity_protection.jpg
 
-    <iframe style='pointer-events: none;' frameborder='0' height='448' marginheight='0' marginwidth='0' scrolling='no' src='https://123d.circuits.io/circuits/1976583-diode-mosfet/embed#schematic' width='650'></iframe>
 
 Using a diode is one easy way to prevent current in your system from flowing in
 the wrong direction. However, they have a forward voltage drop which both reduces
@@ -28,8 +27,15 @@ Part           Voltage Drop at 2A                                             Po
 ============== ============================================================== ========
 Diode (1N5400)  0.85V                                                         1.7W
 Schottky Diode  0.55V                                                         1.1W
-PNP MOSFET      :math:`R_{DS(ON)}=26 m\Omega \to 2A * .026 \Omega = 52 mV`    1.04W
+PNP MOSFET      R_DS(ON)=26 mOhm to 2A * .026 ohm = 52 mV                     1.04mW
 ============== ============================================================== ========
 
 Using a PNP MOSFET is better because it lowers your battery voltage less and
 wastes less power.
+
+This `video <https://www.youtube.com/watch?v=IrB-FPcv1Dc>`_ does a great job of explaining
+this a little more. It also explains why you *might* have to include a resistor and zener
+diode to clamp the voltage, depending on the MOSFET you select.
+
+
+.. image:: {filename}/blog/robots/pics/reverse_polarity_protection_2.png

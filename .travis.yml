@@ -8,7 +8,9 @@ git:
     submodules: false
 
 before_install:
-    - git submodule update --init --recursive
+    # - git submodule update --init --recursive
+    - rm -fr pelican-plugins
+    - git clone --recursive https://github.com/getpelican/pelican-plugins
 
 
 install:
